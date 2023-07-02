@@ -163,7 +163,14 @@ public class GameManager : MonoBehaviour
             }     
             else
             {
-                groupsToCompare.Clear();
+                //groupsToCompare.Clear();
+                for (int i = 0; i < groupsToCompare.Count; i++)
+                {
+                    if ((groupsToCompare[i].IsFaceOn && groupsToCompare[i].IsClosing) || !groupsToCompare[i].IsFaceOn)
+                    {
+                        groupsToCompare.Remove(groupsToCompare[i]);
+                    }
+                }
             }
         } 
         else if (groupsToCompare.Count > 0)
