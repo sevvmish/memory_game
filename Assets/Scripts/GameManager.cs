@@ -3,13 +3,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
+[DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
     [SerializeField] private GameObject back;
     [SerializeField] private Transform PanelsLocation;
     [SerializeField] private SpritesPack spritesPack;
     [SerializeField] private Camera mainCamera;
+    [SerializeField] private GameObject basicPanel;
+
+    [SerializeField] private AudioManager _audio;
+    public AudioManager GetAudio { get => _audio; }
+
+    [SerializeField] private Button re;
+    private bool isRestaring;
 
     private int pairAmount;
     private int overallPanels
@@ -25,17 +37,32 @@ public class GameManager : MonoBehaviour
     private Ray ray;
     private RaycastHit hit;
 
-    private GameObject basicPanel;
+    
     private List<panel> panels = new List<panel>();
     private List<panel> groupsToCompare = new List<panel>();
 
     private void Awake()
     {
-        pairAmount = (int)Globals.CurrentPairGroupType;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
 
-        basicPanel = Resources.Load<GameObject>("basic panel");
-        int count = CreatePanels((int)Globals.PanelsNumber.x, (int)Globals.PanelsNumber.x);
+        AudioListener.volume = 0.7f;
+
+        pairAmount = (int)Globals.CurrentPairGroupType;
+                
+        int count = CreatePanels((int)Globals.PanelsNumber.x, (int)Globals.PanelsNumber.y);
         ArrangePanels(spritesPack.pack1, count, pairAmount);
+
+        re.onClick.AddListener(() => 
+        {
+            SceneManager.LoadScene("SampleScene");
+        });
     }
 
     private int CreatePanels(int horizontaly, int vertically)
@@ -49,6 +76,14 @@ public class GameManager : MonoBehaviour
         {
             zAxis = -3.5f;
         }
+        else if (max <= 5)
+        {
+            zAxis = -3.5f;
+        }
+        else if (max <= 6)
+        {
+            zAxis = -3.5f;
+        }
 
         float startX = (float)horizontaly / 2 - 0.5f;
         float startY = (float)vertically / 2 - 0.5f;
@@ -57,7 +92,7 @@ public class GameManager : MonoBehaviour
         {
             for (int y = 0; y < vertically; y++)
             {
-                GameObject g = Instantiate(basicPanel, new Vector3(x - startX, y - startY, zAxis), Quaternion.identity);
+                GameObject g = Instantiate(basicPanel, new Vector3(x - startX, y - startY, zAxis), Quaternion.identity, PanelsLocation);
                 panel p = g.GetComponent<panel>();
                 panels.Add(p);
                 panelsAmount++;                
@@ -153,7 +188,7 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < groupsToCompare.Count; i++)
                 {
-                    groupsToCompare[i].IsCompleted = true;
+                    groupsToCompare[i].MakeCompleted();
                     groupsToCompare[i].panelTransform.localEulerAngles = new Vector3(0f, 180f, 0f);
                     collectedPanels++;
                     print("panel compleed");
@@ -188,6 +223,7 @@ public class GameManager : MonoBehaviour
         if (overallPanels == collectedPanels)
         {
             Debug.LogError("GAME WIN");
+            if (!isRestaring) StartCoroutine(playRestart());
         }
 
 
@@ -213,5 +249,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private IEnumerator playRestart()
+    {
+        isRestaring = true;
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene("SampleScene");
+    }
+
     
+
 }

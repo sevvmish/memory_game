@@ -8,23 +8,37 @@ public class panel : MonoBehaviour
     public MeshRenderer renderer;
     public int ID;
     public Transform panelTransform;
+
     public bool IsFaceOn { get 
         {
             return (panelTransform.localEulerAngles.y != 0);
         } }
 
-    public bool IsCompleted;
+    public bool IsCompleted { get; private set; }
     public bool IsOpening { get; private set; }
     public bool IsClosing { get; private set; }
 
+    private AudioManager _audioPack;
+
     public void SetPanelData(int _id, Sprite sprite)
     {
+        _audioPack = GameManager.Instance.GetAudio;
         panelTransform = transform;
         Material newMaterial = Instantiate(renderer.material);
         newMaterial.SetTexture("_MainTex", sprite.texture);
         ID = _id;
         renderer.material = newMaterial;
         IsCompleted = false;
+    }
+
+    public bool MakeCompleted()
+    {
+        if (IsCompleted) { return false; }
+        IsCompleted = true;
+        _audioPack.PlaySound_Success();
+        //panelTransform.localEulerAngles = new Vector3(0, 180, 0);
+        StartCoroutine(playShowFace());
+        return true;
     }
 
     public bool TryShowFace()
@@ -34,18 +48,14 @@ public class panel : MonoBehaviour
         return true;
     }
 
-    private bool TryHideFace()
-    {
-        if (!IsFaceOn || IsCompleted) { return false; }
-        StartCoroutine(playHideFace());
-        return true;
-    }
-
     private IEnumerator playShowFace()
     {
+        _audioPack.PlaySound_Click();
+
         IsOpening = true;
         IsClosing = false;
-        panelTransform.DORotate(new Vector3(0, 180, 0), Globals.PanelSimpleRotationSpeed).SetEase(Ease.Linear);
+
+        panelTransform.DORotate(new Vector3(0, 180, 0), Globals.PanelSimpleRotationSpeed).SetEase(Ease.Linear);        
         yield return new WaitForSeconds(Globals.PanelTimeForShowing);
 
         IsOpening = false;
@@ -57,6 +67,8 @@ public class panel : MonoBehaviour
     }
     private IEnumerator playHideFace()
     {
+        _audioPack.PlaySound_BackRotate();
+
         IsOpening = false;
         IsClosing = true;
         
