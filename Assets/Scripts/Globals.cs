@@ -8,7 +8,9 @@ public class Globals : MonoBehaviour
     public static float PanelTimeForShowing = 1.1f;
 
     public static PairGroupTypes CurrentPairGroupType = PairGroupTypes.two;
-    public static Vector2 PanelsNumber = new Vector2(6, 4);
+    public static Vector2 PanelsNumber = new Vector2(8, 5); 
+
+    //max = 10/6
 }
 
 public enum PairGroupTypes
