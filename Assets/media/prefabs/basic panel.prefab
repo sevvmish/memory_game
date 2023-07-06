@@ -200,7 +200,7 @@ Transform:
   m_Children:
   - {fileID: 451860292995628815}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9198065801829594671
 MonoBehaviour:
@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f764f76059814d4fb545bed4f7827d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderer: {fileID: 5908557907893087132}
+  _renderer: {fileID: 5908557907893087132}
   ID: 0
   panelTransform: {fileID: 0}
 --- !u!65 &2297362054476306948

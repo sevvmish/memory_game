@@ -1,11 +1,12 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class panel : MonoBehaviour
 {
-    public MeshRenderer renderer;
+    [SerializeField] private MeshRenderer _renderer;
     public int ID;
     public Transform panelTransform;
 
@@ -24,10 +25,10 @@ public class panel : MonoBehaviour
     {
         _audioPack = GameManager.Instance.GetAudio;
         panelTransform = transform;
-        Material newMaterial = Instantiate(renderer.material);
+        Material newMaterial = Instantiate(_renderer.material);
         newMaterial.SetTexture("_MainTex", sprite.texture);
         ID = _id;
-        renderer.material = newMaterial;
+        _renderer.material = newMaterial;
         IsCompleted = false;
     }
 
@@ -77,4 +78,11 @@ public class panel : MonoBehaviour
 
         IsClosing = false;
     }
+
+    public void SetVisibility(bool isVisible)
+    {
+        gameObject.SetActive(isVisible);
+    }
+
+    public bool GetVisibility() => gameObject.activeSelf;    
 }

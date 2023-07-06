@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Button re;
     private bool isRestaring;
+    private bool isTouchActive;
 
     private int pairAmount;
     private int overallPanels
@@ -59,18 +60,22 @@ public class GameManager : MonoBehaviour
         pairAmount = (int)Globals.CurrentPairGroupType;
                 
         int count = CreatePanels((int)Globals.PanelsNumber.x, (int)Globals.PanelsNumber.y);
-        ArrangePanels(spritesPack.pack2, count, pairAmount);
+        ArrangePanels(spritesPack.GetRandomPack(), count, pairAmount);
+
+        StartCoroutine(playShowPanels());
 
         re.onClick.AddListener(() => 
         {
-            SceneManager.LoadScene("SampleScene");
+            SceneManager.LoadScene("Gameplay");
         });
     }
 
     private int CreatePanels(int horizontaly, int vertically)
     {
         int panelsAmount = 0;
-                
+
+        float xAxis = 0;
+        float yAxis = 0;
         float zAxis = 0;
 
         if (horizontaly <= 4)
@@ -79,19 +84,33 @@ public class GameManager : MonoBehaviour
         }
         else if (horizontaly <= 5)
         {
-            zAxis = -4f;
+            zAxis = -4.7f;
+            xAxis = 0.5f;
         }
-        else if (horizontaly <= 6)
+        else if (horizontaly <= 6 && vertically <= 4)
         {
-            zAxis = -3.5f;
+            zAxis = -4.4f;
+            xAxis = 0.5f;
         }
-        else if (horizontaly <= 8)
+        else if (horizontaly <= 6 && vertically <= 5)
         {
-            zAxis = -3f;
+            zAxis = -3.9f;
+            xAxis = 0.5f;
+        }
+        else if (horizontaly <= 8 && vertically <= 5)
+        {
+            zAxis = -3.6f;
+            xAxis = 0.5f;
+        }
+        else if (horizontaly <= 8 && vertically <= 6)
+        {
+            zAxis = -3.2f;
+            xAxis = 0.6f;
         }
         else if (horizontaly <= 10 && vertically <= 6)
         {
-            zAxis = -2.5f;
+            zAxis = -3.2f;
+            xAxis = 0.7f;
         }
 
         float startX = (float)horizontaly / 2 - 0.5f;
@@ -101,7 +120,7 @@ public class GameManager : MonoBehaviour
         {
             for (int y = 0; y < vertically; y++)
             {
-                GameObject g = Instantiate(basicPanel, new Vector3(x - startX, y - startY, zAxis), Quaternion.identity, PanelsLocation);
+                GameObject g = Instantiate(basicPanel, new Vector3(x - startX + xAxis, y - startY + yAxis, zAxis), Quaternion.identity, PanelsLocation);
                 panel p = g.GetComponent<panel>();
                 panels.Add(p);
                 panelsAmount++;                
@@ -236,7 +255,7 @@ public class GameManager : MonoBehaviour
         }
 
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && isTouchActive)
         {
             ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
@@ -265,6 +284,67 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Gameplay");
     }
 
-    
+    private IEnumerator playShowPanels()
+    {
+        float xmin = 1000;
+        float xmax = -1000;
+        float ymin = 1000;
+        float ymax = -1000;
+
+        for (int i = 0; i < panels.Count; i++)
+        {
+            panels[i].SetVisibility(false);
+            panels[i].transform.DOScale(Vector3.zero, 0);
+            if (panels[i].transform.position.x < xmin)
+            {
+                xmin = panels[i].transform.position.x;
+            }
+            if (panels[i].transform.position.x > xmax)
+            {
+                xmax = panels[i].transform.position.x;
+            }
+            if (panels[i].transform.position.y < ymin)
+            {
+                ymin = panels[i].transform.position.y;
+            }
+            if (panels[i].transform.position.y > ymax)
+            {
+                ymax = panels[i].transform.position.y;
+            }
+        }
+
+        float x = (xmin + xmax) / 2f;
+        float y = (ymin + ymax) / 2f;
+
+        for (float j = 0; j < 5; j+=0.15f)
+        {
+            for (int i = 0; i < panels.Count; i++)
+            {
+                if (
+                    panels[i].transform.position.x < (x + j) 
+                    && panels[i].transform.position.x > (x - j)
+                    && panels[i].transform.position.y < (y + j)
+                    && panels[i].transform.position.y > (y - j)
+                    )
+                {
+                    if (!panels[i].GetVisibility())
+                    {                        
+                        panels[i].SetVisibility(true);                        
+                        panels[i].transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutSine);
+                    }
+                    
+                }
+            }
+
+            yield return new WaitForSeconds(0.02f);
+        }
+
+        for (int i = 0; i < panels.Count; i++)
+        {
+            panels[i].SetVisibility(true);
+        }
+
+        isTouchActive = true;      
+    }
 
 }

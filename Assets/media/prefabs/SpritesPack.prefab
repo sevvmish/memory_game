@@ -90,3 +90,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7032fcd308263d04ba5707fdd03d7d31, type: 3}
   - {fileID: 21300000, guid: fc7fb0901c3f5f749b03115f5e71a9a0, type: 3}
   - {fileID: 21300000, guid: 038c46acd51e7534b9f8e94e54a67d5a, type: 3}
+  packs:
+  - {fileID: 11400000, guid: 4407a7511fb6be040ae4ca03510b6362, type: 2}
+  - {fileID: 11400000, guid: 2fc1082172f28ca468e37759f5292cfe, type: 2}
+  - {fileID: 11400000, guid: 120e08b86522f204cae7cfb6681a8b44, type: 2}
+  - {fileID: 11400000, guid: 297626fd9528be14d9e57dcefaddc02e, type: 2}
