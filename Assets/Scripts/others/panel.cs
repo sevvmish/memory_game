@@ -1,12 +1,14 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class panel : MonoBehaviour
 {
     [SerializeField] private MeshRenderer _renderer;
+    [SerializeField] private GameObject blinkEffect;
+    [SerializeField] private GameObject matchEffect;
+
     public int ID;
     public Transform panelTransform;
 
@@ -30,6 +32,8 @@ public class panel : MonoBehaviour
         ID = _id;
         _renderer.material = newMaterial;
         IsCompleted = false;
+        blinkEffect.SetActive(false);
+        matchEffect.SetActive(false);
     }
 
     public bool MakeCompleted()
@@ -37,6 +41,7 @@ public class panel : MonoBehaviour
         if (IsCompleted) { return false; }
         IsCompleted = true;
         _audioPack.PlaySound_Success();
+        matchEffect.SetActive(true);
         //panelTransform.localEulerAngles = new Vector3(0, 180, 0);
         StartCoroutine(playShowFace());
         return true;
@@ -52,12 +57,14 @@ public class panel : MonoBehaviour
     private IEnumerator playShowFace()
     {
         _audioPack.PlaySound_Click();
+        blinkEffect.SetActive(true);
 
         IsOpening = true;
         IsClosing = false;
 
         panelTransform.DORotate(new Vector3(0, 180, 0), Globals.PanelSimpleRotationSpeed).SetEase(Ease.Linear);        
         yield return new WaitForSeconds(Globals.PanelTimeForShowing);
+        blinkEffect.SetActive(false);
 
         IsOpening = false;
 
@@ -84,5 +91,6 @@ public class panel : MonoBehaviour
         gameObject.SetActive(isVisible);
     }
 
-    public bool GetVisibility() => gameObject.activeSelf;    
+    public bool GetVisibility() => gameObject.activeSelf;
+    
 }

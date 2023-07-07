@@ -8,6 +8,8 @@ public class SpritesPack : MonoBehaviour
 
     public Sprite[] pack2;
 
+    public Sprite[] backgrounds;
+
     public Pack[] packs;
 
     public Sprite[] GetRandomPack()
@@ -20,6 +22,11 @@ public class SpritesPack : MonoBehaviour
         {
             return packs[UnityEngine.Random.Range(0, packs.Length - 1)].sprites;
         }
+    }
+
+    public Sprite GetRandomBackGround()
+    {
+        return backgrounds[UnityEngine.Random.Range(0, backgrounds.Length - 1)];
     }
 
 }

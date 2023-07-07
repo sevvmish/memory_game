@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField] private GameObject back;
+    [SerializeField] private Image backGround;
     [SerializeField] private Transform PanelsLocation;
     [SerializeField] private SpritesPack spritesPack;
     [SerializeField] private Camera mainCamera;
@@ -55,12 +55,13 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-        AudioListener.volume = 0.7f;
+        AudioListener.volume = 0.8f;
 
         pairAmount = (int)Globals.CurrentPairGroupType;
                 
         int count = CreatePanels((int)Globals.PanelsNumber.x, (int)Globals.PanelsNumber.y);
         ArrangePanels(spritesPack.GetRandomPack(), count, pairAmount);
+        backGround.sprite = spritesPack.GetRandomBackGround();
 
         StartCoroutine(playShowPanels());
 
@@ -94,13 +95,13 @@ public class GameManager : MonoBehaviour
         }
         else if (horizontaly <= 6 && vertically <= 5)
         {
-            zAxis = -3.9f;
+            zAxis = -4f;
             xAxis = 0.5f;
         }
         else if (horizontaly <= 8 && vertically <= 5)
         {
-            zAxis = -3.6f;
-            xAxis = 0.5f;
+            zAxis = -4f;
+            xAxis = 0.6f;
         }
         else if (horizontaly <= 8 && vertically <= 6)
         {
@@ -121,6 +122,7 @@ public class GameManager : MonoBehaviour
             for (int y = 0; y < vertically; y++)
             {
                 GameObject g = Instantiate(basicPanel, new Vector3(x - startX + xAxis, y - startY + yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0,0,UnityEngine.Random.Range(-1.5f, 1.5f));
                 panel p = g.GetComponent<panel>();
                 panels.Add(p);
                 panelsAmount++;                

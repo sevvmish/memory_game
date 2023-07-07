@@ -90,6 +90,18 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7032fcd308263d04ba5707fdd03d7d31, type: 3}
   - {fileID: 21300000, guid: fc7fb0901c3f5f749b03115f5e71a9a0, type: 3}
   - {fileID: 21300000, guid: 038c46acd51e7534b9f8e94e54a67d5a, type: 3}
+  backgrounds:
+  - {fileID: 21300000, guid: 835c0da07ba710e48963888bf606fc46, type: 3}
+  - {fileID: 21300000, guid: d1e464d0eaa1bf347bbc1ce570a9495f, type: 3}
+  - {fileID: 21300000, guid: c52183c79f9172e44b0716a33373954f, type: 3}
+  - {fileID: 21300000, guid: e13fba9f989c3e340b3bfbe57694a2dc, type: 3}
+  - {fileID: 21300000, guid: f2e3f4ac8a934664f9249679ed7824cd, type: 3}
+  - {fileID: 21300000, guid: 66820adb974cadf4c96dac57ab2a5cc3, type: 3}
+  - {fileID: 21300000, guid: d5eacdd9741f36541ae3943a9edd7a5e, type: 3}
+  - {fileID: 21300000, guid: eb8d6d149fd09c249b6f904e4a334dcd, type: 3}
+  - {fileID: 21300000, guid: e008b67dae82c6940826e5efff7ee876, type: 3}
+  - {fileID: 21300000, guid: 93f23d8088024ad40b0ace9a0c6088a9, type: 3}
+  - {fileID: 21300000, guid: 05d4ccf6a46f6dd4aa39245629488f9e, type: 3}
   packs:
   - {fileID: 11400000, guid: 4407a7511fb6be040ae4ca03510b6362, type: 2}
   - {fileID: 11400000, guid: 2fc1082172f28ca468e37759f5292cfe, type: 2}
