@@ -5,6 +5,11 @@ using UnityEngine;
 public class Globals : MonoBehaviour
 {
     public static float PanelSimpleRotationSpeed = 0.35f;
+    
+    //level customization
+    public static float TimeForLevelInSec = 240;
+    
+    
     public static float PanelTimeForShowing
     {
         get
@@ -23,7 +28,7 @@ public class Globals : MonoBehaviour
         //= 1.1f;
 
     public static PairGroupTypes CurrentPairGroupType = PairGroupTypes.two;
-    public static Vector2 PanelsNumber = new Vector2(8, 6);
+    public static Vector2 PanelsNumber = new Vector2(8, 5);
 
     //TWO
     // 3/2 - 3 uniques
@@ -34,9 +39,8 @@ public class Globals : MonoBehaviour
     // 6/4 - 12 uniques
     // 6/5 - 15 uniques
     // 8/5 - 20 uniques
-    // 8/6 - 24 uniques
-    // 10/6 - 30 uniques
-    //max = 10/6
+    // 8/6 - 24 uniques    
+    //max = 8/6
 
     //THREE
     // 3/3 - 3 uniques

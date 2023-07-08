@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 [DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
@@ -16,13 +17,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SpritesPack spritesPack;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private GameObject basicPanel;
-
     [SerializeField] private AudioManager _audio;
+
+    [Header("Timer")]
+    [SerializeField] private Image timerSliderImage;
+    [SerializeField] private TextMeshProUGUI timerText;
+
     public AudioManager GetAudio { get => _audio; }
 
     [SerializeField] private Button re;
     private bool isRestaring;
     private bool isTouchActive;
+    private bool isGameStarted;
 
     private int pairAmount;
     private int overallPanels
@@ -34,6 +40,11 @@ public class GameManager : MonoBehaviour
     }
 
     private int collectedPanels;
+        
+    private float currentTimer;
+    private float _timer;
+    private readonly float timerUpdateCooldown = 1f;
+
 
     private Ray ray;
     private RaycastHit hit;
@@ -60,10 +71,16 @@ public class GameManager : MonoBehaviour
         pairAmount = (int)Globals.CurrentPairGroupType;
                 
         int count = CreatePanels((int)Globals.PanelsNumber.x, (int)Globals.PanelsNumber.y);
-        ArrangePanels(spritesPack.GetRandomPack(), count, pairAmount);
+        //ArrangePanels(spritesPack.GetRandomPack(), count, pairAmount);
+        panel.ArrangePanels(spritesPack.GetRandomPack(), count, pairAmount, ref panels);
         backGround.sprite = spritesPack.GetRandomBackGround();
 
+        timerSliderImage.fillAmount = 1f;
+        timerText.text = "";
+        currentTimer = Globals.TimeForLevelInSec;
+
         StartCoroutine(playShowPanels());
+        StartCoroutine(fadeScreenOff());
 
         re.onClick.AddListener(() => 
         {
@@ -85,28 +102,27 @@ public class GameManager : MonoBehaviour
         }
         else if (horizontaly <= 5)
         {
-            zAxis = -4.7f;
-            xAxis = 0.5f;
+            zAxis = -4.7f;            
         }
         else if (horizontaly <= 6 && vertically <= 4)
         {
             zAxis = -4.4f;
-            xAxis = 0.5f;
+            //xAxis = 0.2f;
         }
         else if (horizontaly <= 6 && vertically <= 5)
         {
             zAxis = -4f;
-            xAxis = 0.5f;
+            //xAxis = 0.2f;
         }
         else if (horizontaly <= 8 && vertically <= 5)
         {
-            zAxis = -4f;
-            xAxis = 0.6f;
+            zAxis = -3.8f;
+            xAxis = 0.1f;
         }
         else if (horizontaly <= 8 && vertically <= 6)
         {
-            zAxis = -3.2f;
-            xAxis = 0.6f;
+            zAxis = -3.3f;
+            //xAxis = 0.3f;
         }
         else if (horizontaly <= 10 && vertically <= 6)
         {
@@ -132,69 +148,26 @@ public class GameManager : MonoBehaviour
         return panelsAmount;
     }
 
-    private void ArrangePanels(Sprite[] source, int panelsAmount, int similarPanelsAmount)
-    {        
-        int uniques = panelsAmount / similarPanelsAmount;
-
-        if (panelsAmount % similarPanelsAmount != 0)
-        {
-            Debug.LogError("количество карточек не четно количеству одинаковых");
-        }
-
-        if (panelsAmount < (similarPanelsAmount * 2))
-        {
-            Debug.LogError("количество панелей и пар для них не сщвпадают");
-        }
-
-        if (uniques > source.Length)
-        {
-            Debug.LogError("не хватает уникальных текстур");
-        }
-
-        List<int> panelsNumberToMark = new List<int>();
-        for (int i = 0; i < panelsAmount; i++)
-        {
-            panelsNumberToMark.Add(i);
-        }
-
-        List<int> spritesNumberToSet = new List<int>();
-        for (int i = 0; i < source.Length; i++)
-        {
-            spritesNumberToSet.Add(i);
-        }
-
-        for (int i = 0; i < uniques; i++)
-        {
-            int uniqueID = UnityEngine.Random.Range(0, 1000000);
-
-            int spriteRND = UnityEngine.Random.Range(0, spritesNumberToSet.Count);
-            Sprite sprite = source[spritesNumberToSet[spriteRND]];
-            spritesNumberToSet.Remove(spritesNumberToSet[spriteRND]);
-
-            for (int j = 0; j < similarPanelsAmount; j++)
-            {
-                int panelNumber = -1;
-                if (panelsNumberToMark.Count > 1)
-                {
-                    int rnd = UnityEngine.Random.Range(0, panelsNumberToMark.Count);
-                    panelNumber = panelsNumberToMark[rnd];
-                    panelsNumberToMark.Remove(panelsNumberToMark[rnd]);
-                }
-                else
-                {
-                    panelNumber = panelsNumberToMark[0];
-                    panelsNumberToMark.Remove(panelsNumberToMark[0]);
-                }
-
-
-                panels[panelNumber].SetPanelData(uniqueID, sprite);
-            }
-        }
-
-    }
-
+    
     private void Update()
     {
+        if (isGameStarted)
+        {
+            currentTimer -= Time.deltaTime;
+            //timer update every 1 sec
+            if (_timer > timerUpdateCooldown)
+            {
+                _timer = 0;
+                if (currentTimer >= 0) updateTimer();
+            }
+            else
+            {
+                _timer += Time.deltaTime;
+            }
+        }
+        
+
+        //check for finding
         if (groupsToCompare.Count == pairAmount)
         {
             
@@ -221,7 +194,6 @@ public class GameManager : MonoBehaviour
                     groupsToCompare[i].MakeCompleted();
                     groupsToCompare[i].panelTransform.localEulerAngles = new Vector3(0f, 180f, 0f);
                     collectedPanels++;
-                    print("panel compleed");
                 }
 
                 groupsToCompare.Clear();
@@ -270,7 +242,6 @@ public class GameManager : MonoBehaviour
                         if (takenPanel.TryShowFace())
                         {
                             groupsToCompare.Add(takenPanel);
-                            print("added to comparers");
                         }
                     }
                     
@@ -279,15 +250,44 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void updateTimer()
+    {
+        timerSliderImage.fillAmount = currentTimer / Globals.TimeForLevelInSec;
+        int minutes = (int)(currentTimer / 60f);
+        int seconds = (int)(currentTimer - (minutes * 60));
+
+        string minutesToShow = minutes.ToString();
+        string secondsToShow = seconds.ToString();
+
+        if (minutes <=0)
+        {
+            minutesToShow = "00";
+        }
+        else if (minutes < 10)
+        {
+            minutesToShow = "0" + minutes.ToString();
+        }
+
+        if (seconds < 10)
+        {
+            secondsToShow = "0" + seconds.ToString();
+        }
+
+        timerText.text = minutesToShow + ":" + secondsToShow;
+    }
+
     private IEnumerator playRestart()
     {
         isRestaring = true;
+        yield return new WaitForSeconds(0.5f);
+        
+        StartCoroutine(fadeScreenOn());
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene("Gameplay");
     }
 
     private IEnumerator playShowPanels()
-    {
+    {        
         float xmin = 1000;
         float xmax = -1000;
         float ymin = 1000;
@@ -314,6 +314,8 @@ public class GameManager : MonoBehaviour
                 ymax = panels[i].transform.position.y;
             }
         }
+
+        yield return new WaitForSeconds(0.5f);
 
         float x = (xmin + xmax) / 2f;
         float y = (ymin + ymax) / 2f;
@@ -346,7 +348,27 @@ public class GameManager : MonoBehaviour
             panels[i].SetVisibility(true);
         }
 
-        isTouchActive = true;      
+        isTouchActive = true;
+        isGameStarted = true;
     }
 
+    private IEnumerator fadeScreenOff()
+    {
+        GameObject TransitionScreen = Instantiate(Resources.Load<GameObject>("TransitionCanvas"));
+        TransitionScreen.gameObject.name = "TransitionScreen";
+        TransitionScreen.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(0, 0, 0, 1), 0);
+        TransitionScreen.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(0, 0, 0, 0), 1);
+        yield return new WaitForSeconds(1);
+
+        TransitionScreen.SetActive(false);
+    }
+
+    private IEnumerator fadeScreenOn()
+    {
+        GameObject TransitionScreen = Instantiate(Resources.Load<GameObject>("TransitionCanvas"));
+        TransitionScreen.gameObject.name = "TransitionScreen";
+        TransitionScreen.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(0, 0, 0, 0), 0);
+        TransitionScreen.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(0, 0, 0, 1), 1);
+        yield return new WaitForSeconds(1);                
+    }
 }

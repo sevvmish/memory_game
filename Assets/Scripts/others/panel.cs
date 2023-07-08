@@ -92,5 +92,65 @@ public class panel : MonoBehaviour
     }
 
     public bool GetVisibility() => gameObject.activeSelf;
-    
+
+    public static void ArrangePanels(Sprite[] source, int panelsAmount, int similarPanelsAmount, ref List<panel> panels)
+    {
+        int uniques = panelsAmount / similarPanelsAmount;
+
+        if (panelsAmount % similarPanelsAmount != 0)
+        {
+            Debug.LogError("количество карточек не четно количеству одинаковых");
+        }
+
+        if (panelsAmount < (similarPanelsAmount * 2))
+        {
+            Debug.LogError("количество панелей и пар для них не сщвпадают");
+        }
+
+        if (uniques > source.Length)
+        {
+            Debug.LogError("не хватает уникальных текстур");
+        }
+
+        List<int> panelsNumberToMark = new List<int>();
+        for (int i = 0; i < panelsAmount; i++)
+        {
+            panelsNumberToMark.Add(i);
+        }
+
+        List<int> spritesNumberToSet = new List<int>();
+        for (int i = 0; i < source.Length; i++)
+        {
+            spritesNumberToSet.Add(i);
+        }
+
+        for (int i = 0; i < uniques; i++)
+        {
+            int uniqueID = UnityEngine.Random.Range(0, 1000000);
+
+            int spriteRND = UnityEngine.Random.Range(0, spritesNumberToSet.Count);
+            Sprite sprite = source[spritesNumberToSet[spriteRND]];
+            spritesNumberToSet.Remove(spritesNumberToSet[spriteRND]);
+
+            for (int j = 0; j < similarPanelsAmount; j++)
+            {
+                int panelNumber = -1;
+                if (panelsNumberToMark.Count > 1)
+                {
+                    int rnd = UnityEngine.Random.Range(0, panelsNumberToMark.Count);
+                    panelNumber = panelsNumberToMark[rnd];
+                    panelsNumberToMark.Remove(panelsNumberToMark[rnd]);
+                }
+                else
+                {
+                    panelNumber = panelsNumberToMark[0];
+                    panelsNumberToMark.Remove(panelsNumberToMark[0]);
+                }
+
+                panels[panelNumber].SetPanelData(uniqueID, sprite);
+            }
+        }
+
+    }
+
 }
