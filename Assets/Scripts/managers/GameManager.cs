@@ -116,13 +116,13 @@ public class GameManager : MonoBehaviour
         }
         else if (horizontaly <= 8 && vertically <= 5)
         {
-            zAxis = -3.8f;
+            zAxis = -3.1f;
             xAxis = 0.1f;
         }
         else if (horizontaly <= 8 && vertically <= 6)
         {
-            zAxis = -3.3f;
-            //xAxis = 0.3f;
+            zAxis = -3.2f;
+            xAxis = 0.1f;
         }
         else if (horizontaly <= 10 && vertically <= 6)
         {

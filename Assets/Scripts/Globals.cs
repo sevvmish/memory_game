@@ -6,10 +6,12 @@ public class Globals : MonoBehaviour
 {
     public static float PanelSimpleRotationSpeed = 0.35f;
     
-    //level customization
+    //level customization============================
     public static float TimeForLevelInSec = 240;
-    
-    
+    public static Vector2 PanelsNumber = new Vector2(8, 5);
+
+    //===============================================
+
     public static float PanelTimeForShowing
     {
         get
@@ -28,7 +30,7 @@ public class Globals : MonoBehaviour
         //= 1.1f;
 
     public static PairGroupTypes CurrentPairGroupType = PairGroupTypes.two;
-    public static Vector2 PanelsNumber = new Vector2(8, 5);
+    
 
     //TWO
     // 3/2 - 3 uniques
