@@ -8,7 +8,7 @@ public class Globals : MonoBehaviour
     
     //level customization============================
     public static float TimeForLevelInSec = 240;
-    public static Vector2 PanelsNumber = new Vector2(8, 5);
+    public static Vector2 PanelsNumber = new Vector2(8, 6);
 
     //===============================================
 
