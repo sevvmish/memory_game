@@ -47,3 +47,6 @@ MonoBehaviour:
   SimpleClick: {fileID: 8300000, guid: 1fe38548cb22d16419b4dc73f8138c1f, type: 3}
   ReverseClick: {fileID: 8300000, guid: aba03d1627caa454c82ac9b016ad575f, type: 3}
   Happy01: {fileID: 8300000, guid: c705a9e6e3ad441448724eb46cb36207, type: 3}
+  CardsShuffle: {fileID: 8300000, guid: fa55ff8e45a3a9b47bfc5b4bf538b30c, type: 3}
+  WinMelody: {fileID: 8300000, guid: c2e6876715ca12b46adcbecbefd9d361, type: 3}
+  LoseMelody: {fileID: 8300000, guid: 7125750c30f9ed844a137415f5cbb9b4, type: 3}

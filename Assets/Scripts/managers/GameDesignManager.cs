@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameDesignManager
 {
-    public const int MAX_LVL_TYPE_1 = 30;
+    public const int MAX_LVL_TYPE_1 = 50;
     public const int MAX_LVL_TYPE_2 = 15;
 
     private Vector2 PanelsNumber;

@@ -5,17 +5,27 @@ using UnityEngine;
 public class Localization
 {
     private Translation translation;
-    private Localization() 
+    private Localization(string lang) 
     {
-        translation = Resources.Load<Translation>("languages/russian");
+        switch(lang)
+        {
+            case "ru":
+                translation = Resources.Load<Translation>("languages/russian");
+                break;
+
+            default:
+                translation = Resources.Load<Translation>("languages/russian");
+                break;
+        }
+        
     }
 
     private static Localization instance;
-    public static Localization GetInstanse()
+    public static Localization GetInstanse(string lang)
     {
         if (instance == null)
         {
-            instance = new Localization();
+            instance = new Localization(lang);
         }
 
         return instance;

@@ -31,6 +31,21 @@ public class AudioManager : MonoBehaviour
         playStandartSound(1, audioPack.Happy01);        
     }
 
+    public void PlaySound_CardShuffle()
+    {
+        playStandartSound(0, audioPack.CardsShuffle);
+    }
+
+    public void PlaySound_WinGame()
+    {
+        playStandartSound(2, audioPack.WinMelody);
+    }
+
+    public void PlaySound_LoseGame()
+    {
+        playStandartSound(2, audioPack.LoseMelody);
+    }
+
     private void playStandartSound(int _priority, AudioClip clip)
     {
         if ((priority > _priority && _audio.isPlaying) || (_audio.clip == clip && _audio.isPlaying)) return;

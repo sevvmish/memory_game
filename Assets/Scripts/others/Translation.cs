@@ -6,9 +6,16 @@ using UnityEngine;
 public class Translation : ScriptableObject
 {
     //HEROES==============================================
-    [Header("heroes")]
-    public string LeapHeroName;
-    
+    public string playText;
+
+    [Header("Types")]
+    public string Type1Name;
+    public string Type2Name;
+    public string Type3Name;
+
+    public string Type1Description;
+    public string Type2Description;
+    public string Type3Description;
 
 
     public Translation() { }
