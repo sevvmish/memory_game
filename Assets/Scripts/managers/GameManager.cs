@@ -6,10 +6,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using YG;
 
 [DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
-{
+{    
     public static GameManager Instance { get; private set; }
 
     [SerializeField] private Image backGround;
@@ -25,7 +26,12 @@ public class GameManager : MonoBehaviour
 
     public AudioManager GetAudio { get => _audio; }
 
+    //to del
     [SerializeField] private Button re;
+    [SerializeField] private Button win;
+    [SerializeField] private Button lose;
+
+
     private bool isRestaring;
     private bool isTouchActive;
     private bool isGameStarted;
@@ -50,12 +56,16 @@ public class GameManager : MonoBehaviour
     private RaycastHit hit;
 
     
-    private List<panel> panels = new List<panel>();
-    private List<panel> groupsToCompare = new List<panel>();
+    private List<Panel> panels = new List<Panel>();
+    private List<Panel> groupsToCompare = new List<Panel>();
+
+    private Action nextLevelAction;
 
     private void Awake()
     {
         //Screen.SetResolution(1200, 600, true);
+        //SaveLoadManager.Load();
+        _audio.UnMute();
 
         if (Instance != null && Instance != this)
         {
@@ -65,19 +75,17 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
-
-        AudioListener.volume = 0.8f;
-
+                        
         pairAmount = (int)Globals.CurrentPairGroupType;
                 
-        int count = CreatePanels((int)Globals.PanelsNumber.x, (int)Globals.PanelsNumber.y);
-        //ArrangePanels(spritesPack.GetRandomPack(), count, pairAmount);
-        panel.ArrangePanels(spritesPack.GetRandomPack(), count, pairAmount, ref panels);
+        int count = Panel.CreatePanels((int)Globals.PanelsNumber.x, (int)Globals.PanelsNumber.y, 
+            basicPanel, PanelsLocation, ref panels);        
+        Panel.ArrangePanels(spritesPack.GetRandomPack(), count, pairAmount, ref panels);
         backGround.sprite = spritesPack.GetRandomBackGround();
 
         timerSliderImage.fillAmount = 1f;
         timerText.text = "";
-        currentTimer = Globals.TimeForLevelInSec;
+        currentTimer = Globals.StageDurationInSec;
 
         StartCoroutine(playShowPanels());
         StartCoroutine(fadeScreenOff());
@@ -86,67 +94,21 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("Gameplay");
         });
+
+        win.onClick.AddListener(() =>
+        {
+            gameWin();
+        });
+
+        lose.onClick.AddListener(() =>
+        {
+            currentTimer = 0;
+        });
+
+        Resources.UnloadUnusedAssets();
     }
 
-    private int CreatePanels(int horizontaly, int vertically)
-    {
-        int panelsAmount = 0;
-
-        float xAxis = 0;
-        float yAxis = 0;
-        float zAxis = 0;
-
-        if (horizontaly <= 4)
-        {
-            zAxis = -4.5f;
-        }
-        else if (horizontaly <= 5)
-        {
-            zAxis = -4.7f;            
-        }
-        else if (horizontaly <= 6 && vertically <= 4)
-        {
-            zAxis = -4.4f;
-            //xAxis = 0.2f;
-        }
-        else if (horizontaly <= 6 && vertically <= 5)
-        {
-            zAxis = -4f;
-            //xAxis = 0.2f;
-        }
-        else if (horizontaly <= 8 && vertically <= 5)
-        {
-            zAxis = -3.1f;
-            xAxis = 0.1f;
-        }
-        else if (horizontaly <= 8 && vertically <= 6)
-        {
-            zAxis = -3.2f;
-            xAxis = 0.1f;
-        }
-        else if (horizontaly <= 10 && vertically <= 6)
-        {
-            zAxis = -3.2f;
-            xAxis = 0.7f;
-        }
-
-        float startX = (float)horizontaly / 2 - 0.5f;
-        float startY = (float)vertically / 2 - 0.5f;
-
-        for (int x = 0; x < horizontaly; x++)
-        {
-            for (int y = 0; y < vertically; y++)
-            {
-                GameObject g = Instantiate(basicPanel, new Vector3(x - startX + xAxis, y - startY + yAxis, zAxis), Quaternion.identity, PanelsLocation);
-                g.transform.localEulerAngles = new Vector3(0,0,UnityEngine.Random.Range(-1.5f, 1.5f));
-                panel p = g.GetComponent<panel>();
-                panels.Add(p);
-                panelsAmount++;                
-            }            
-        }
-
-        return panelsAmount;
-    }
+    
 
     
     private void Update()
@@ -221,11 +183,10 @@ public class GameManager : MonoBehaviour
             }
         }
      
-
-        if (overallPanels == collectedPanels)
+        //WIN CONDITION
+        if (overallPanels == collectedPanels && !isRestaring)
         {
-            Debug.LogError("GAME WIN");
-            if (!isRestaring) StartCoroutine(playRestart());
+            gameWin();
         }
 
 
@@ -235,7 +196,7 @@ public class GameManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, 20))
             {                
-                if (hit.collider.TryGetComponent(out panel takenPanel))
+                if (hit.collider.TryGetComponent(out Panel takenPanel))
                 {
                     if (groupsToCompare.Count < pairAmount && !takenPanel.IsFaceOn &&  !groupsToCompare.Contains(takenPanel))
                     {
@@ -250,9 +211,99 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void gameWin()
+    {
+        isGameStarted = false;
+        nextLevelAction = toNextLevel;
+        SaveLoadManager.Save();
+        isRestaring = true;
+
+        Debug.LogError("GAME WIN");
+        ShowInterstitial();
+    }
+
+    private void gameLose()
+    {
+        isGameStarted = false;
+        nextLevelAction = restartCurrentGame;
+        isRestaring = true;
+        Debug.LogError("GAME LOST");
+        ShowInterstitial();
+    }
+
+    private void ShowInterstitial()
+    {
+        print("how much time till start: " + DateTime.Now.Subtract(Globals.TimeWhenLastInterstitialWas).TotalSeconds);
+
+        if (DateTime.Now.Subtract(Globals.TimeWhenLastInterstitialWas).TotalSeconds > Globals.INTERVAL_FOR_INTERSTITITAL)
+        {
+            _audio.Mute();
+            print("starting interstitital");
+
+            GameObject TransitionScreen = Instantiate(Resources.Load<GameObject>("TransitionCanvas"));
+            TransitionScreen.gameObject.name = "TransitionScreen";            
+            TransitionScreen.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(0, 0, 0, 1), 1);
+
+            Globals.TimeWhenLastInterstitialWas = DateTime.Now;
+            Globals.InterstitialsAmount++;
+            YandexGame.OpenFullAdEvent = advStarted;
+            YandexGame.CloseFullAdEvent = advClosed;//nextLevelAction;
+            YandexGame.ErrorFullAdEvent = advError;//nextLevelAction;
+            YandexGame.FullscreenShow();
+        }
+        else
+        {
+            print("not a time for interstitital");
+            nextLevelAction?.Invoke();
+        }        
+    }
+
+    private void advStarted()
+    {
+        print("adv was OK");        
+    }
+
+    private void advClosed()
+    {
+        print("adv was closed");
+        nextLevelAction?.Invoke();
+    }
+
+    private void advError()
+    {
+        print("adv was ERROR");
+        nextLevelAction?.Invoke();
+    }
+
+    private void restartCurrentGame()
+    {
+        StartCoroutine(playrestartCurrentGame());
+    }
+    private IEnumerator playrestartCurrentGame()
+    {
+        //isRestaring = true;
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(fadeScreenOn());
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    private void toNextLevel()
+    {        
+        StartCoroutine(playNextLevel());
+    }
+    private IEnumerator playNextLevel()
+    {
+        //isRestaring = true;
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(fadeScreenOn());
+        yield return new WaitForSeconds(1);
+        Globals.GameDesignManager.SetLevelData(true);
+    }
+
     private void updateTimer()
     {
-        timerSliderImage.fillAmount = currentTimer / Globals.TimeForLevelInSec;
+        timerSliderImage.fillAmount = currentTimer / Globals.StageDurationInSec;
         int minutes = (int)(currentTimer / 60f);
         int seconds = (int)(currentTimer - (minutes * 60));
 
@@ -276,15 +327,7 @@ public class GameManager : MonoBehaviour
         timerText.text = minutesToShow + ":" + secondsToShow;
     }
 
-    private IEnumerator playRestart()
-    {
-        isRestaring = true;
-        yield return new WaitForSeconds(0.5f);
-        
-        StartCoroutine(fadeScreenOn());
-        yield return new WaitForSeconds(1);
-        SceneManager.LoadScene("Gameplay");
-    }
+    
 
     private IEnumerator playShowPanels()
     {        

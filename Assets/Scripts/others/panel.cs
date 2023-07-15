@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class panel : MonoBehaviour
+public class Panel : MonoBehaviour
 {
     [SerializeField] private MeshRenderer _renderer;
     [SerializeField] private GameObject blinkEffect;
@@ -93,7 +93,7 @@ public class panel : MonoBehaviour
 
     public bool GetVisibility() => gameObject.activeSelf;
 
-    public static void ArrangePanels(Sprite[] source, int panelsAmount, int similarPanelsAmount, ref List<panel> panels)
+    public static void ArrangePanels(Sprite[] source, int panelsAmount, int similarPanelsAmount, ref List<Panel> panels)
     {
         int uniques = panelsAmount / similarPanelsAmount;
 
@@ -151,6 +151,66 @@ public class panel : MonoBehaviour
             }
         }
 
+    }
+
+    public static int CreatePanels(int horizontaly, int vertically, GameObject basicPanel, Transform PanelsLocation, ref List<Panel> panels)
+    {
+        int panelsAmount = 0;
+
+        float xAxis = 0;
+        float yAxis = 0;
+        float zAxis = 0;
+
+        if (horizontaly <= 4)
+        {
+            zAxis = -4.5f;
+        }
+        else if (horizontaly <= 5)
+        {
+            zAxis = -4.7f;
+        }
+        else if (horizontaly <= 6 && vertically <= 4)
+        {
+            zAxis = -4.4f;
+            //xAxis = 0.2f;
+        }
+        else if (horizontaly <= 6 && vertically <= 5)
+        {
+            zAxis = -4f;
+            //xAxis = 0.2f;
+        }
+        else if (horizontaly <= 8 && vertically <= 5)
+        {
+            zAxis = -3.1f;
+            xAxis = 0.1f;
+        }
+        else if (horizontaly <= 8 && vertically <= 6)
+        {
+            zAxis = -3.2f;
+            xAxis = 0.1f;
+        }
+        else if (horizontaly <= 10 && vertically <= 6)
+        {
+            zAxis = -3.2f;
+            xAxis = 0.7f;
+        }
+
+        float startX = (float)horizontaly / 2 - 0.5f;
+        float startY = (float)vertically / 2 - 0.5f;
+
+        for (int x = 0; x < horizontaly; x++)
+        {
+            for (int y = 0; y < vertically; y++)
+            {
+                GameObject g = Instantiate(basicPanel, new Vector3(x - startX + xAxis, y - startY + yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                Panel p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+            }
+        }
+
+        return panelsAmount;
     }
 
 }

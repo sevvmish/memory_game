@@ -6,48 +6,29 @@ public class AudioManager : MonoBehaviour
 {
     [SerializeField] private AudioSource _audio;
     [SerializeField] private AudioPack audioPack;
-
+    
     private int priority = 0;
 
     // Start is called before the first frame update
     void Awake()
     {
         _audio = GetComponent<AudioSource>();
+        AudioListener.volume = Globals.BASE_VOLUME;
     }
        
     public void PlaySound_Click()
     {
-        playStandartSound(0, audioPack.SimpleClick);
-        /*
-        if ((priority > 0 && _audio.isPlaying) || (_audio.clip == audioPack.SimpleClick && _audio.isPlaying)) return;
-
-        priority = 0;
-        _audio.Stop();
-        _audio.clip = audioPack.SimpleClick;
-        _audio.Play();*/
+        playStandartSound(0, audioPack.SimpleClick);        
     }
 
     public void PlaySound_BackRotate()
     {
-        playStandartSound(0, audioPack.ReverseClick);
-        /*
-        if (priority > 0 && _audio.isPlaying) return;
-
-        priority = 0;
-        _audio.Stop();
-        _audio.clip = audioPack.ReverseClick;
-        _audio.Play();*/
+        playStandartSound(0, audioPack.ReverseClick);        
     }
 
     public void PlaySound_Success()
     {
-        playStandartSound(1, audioPack.Happy01);
-        /*
-        if (_audio.clip == audioPack.Happy01 && _audio.isPlaying) return;
-        priority = 1;
-        _audio.Stop();
-        _audio.clip = audioPack.Happy01;
-        _audio.Play();*/
+        playStandartSound(1, audioPack.Happy01);        
     }
 
     private void playStandartSound(int _priority, AudioClip clip)
@@ -58,5 +39,15 @@ public class AudioManager : MonoBehaviour
         _audio.Stop();
         _audio.clip = clip;
         _audio.Play();
+    }
+
+    public void Mute()
+    {
+        AudioListener.volume = 0;
+    }
+
+    public void UnMute()
+    {
+        AudioListener.volume = Globals.BASE_VOLUME;
     }
 }

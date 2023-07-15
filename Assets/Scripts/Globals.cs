@@ -1,18 +1,44 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Globals : MonoBehaviour
 {
-    public static float PanelSimpleRotationSpeed = 0.35f;
-    
+    public static GameDesignManager GameDesignManager;
+    public static PlayerData MainPlayerData;
+    public static int GameType;// = 1;
+    public static int GameLevel;// = 0;
+    public static int Difficulty;// = 0;
+
+    //GAME PRESETS
+    public const float BASE_VOLUME = 0.8f;
+
+    public static bool IsInitiated;
+    public static DateTime TimeWhenStartedPlaying;
+
+    public const float INTERVAL_FOR_INTERSTITITAL = 120;
+    public const float INTERVAL_FOR_REWARDED = 120;
+    public static DateTime TimeWhenLastInterstitialWas;
+    public static int InterstitialsAmount;
+    public static DateTime TimeWhenLastRewardedWas;
+    public static int RewardedAmount;
+
+    public static string CurrentLanguage;
+
+    public static float PanelSimpleRotationSpeed;// = 0.35f;
+    public static PairGroupTypes CurrentPairGroupType;// = PairGroupTypes.two;
+
+
     //level customization============================
-    public static float TimeForLevelInSec = 240;
-    public static Vector2 PanelsNumber = new Vector2(8, 6);
+    public static float StageDurationInSec;// = 240;
+    public static Vector2 PanelsNumber;// = new Vector2(4, 2);
 
     //===============================================
 
-    public static float PanelTimeForShowing
+    public static float PanelTimeForShowing;// = 1.1f;
+    
+    /*
     {
         get
         {
@@ -27,35 +53,7 @@ public class Globals : MonoBehaviour
             return 1.1f;
         }
     }
-        //= 1.1f;
-
-    public static PairGroupTypes CurrentPairGroupType = PairGroupTypes.two;
-    
-
-    //TWO
-    // 3/2 - 3 uniques
-    // 4/2 - 4 uniques
-    // 4/3 - 6 uniques
-    // 4/4 - 8 uniques
-    // 5/4 - 10 uniques
-    // 6/4 - 12 uniques
-    // 6/5 - 15 uniques
-    // 8/5 - 20 uniques
-    // 8/6 - 24 uniques    
-    //max = 8/6
-
-    //THREE
-    // 3/3 - 3 uniques
-    // 4/3 - 4 uniques
-    // 5/3 - 5 uniques
-    // 6/3 - 6 uniques
-    // 6/5 - 10 uniques
-    // 6/6 - 12 uniques
-    // 8/6 - 16 uniques
-
+    */
 }
 
-public enum PairGroupTypes
-{
-    two = 2, three = 3, four = 4
-}
+
