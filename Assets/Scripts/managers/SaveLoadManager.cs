@@ -10,7 +10,7 @@ public class SaveLoadManager
     //[DllImport("__Internal")]
     //private static extern void LoadExtern();
 
-    private const string ID = "Playerdata07";
+    private const string ID = "Playerdata10";
 
     public static void Save()
     {
@@ -72,11 +72,11 @@ public class SaveLoadManager
             catch (System.Exception)
             {
                 Globals.MainPlayerData = new PlayerData();
-                Globals.MainPlayerData.LGT = 1;
-                Globals.MainPlayerData.GT1P[0] = 1;
-                Globals.MainPlayerData.GT1P[1] = 1;
-                Globals.MainPlayerData.GT1P[2] = 1;
-                Globals.MainPlayerData.GT1P[3] = 1;
+                //Globals.MainPlayerData.LGT = 1;
+                //Globals.MainPlayerData.GT1P[0] = 1;
+                //Globals.MainPlayerData.GT1P[1] = 1;
+                //Globals.MainPlayerData.GT1P[2] = 1;
+                //Globals.MainPlayerData.GT1P[3] = 1;
             }
                         
         }

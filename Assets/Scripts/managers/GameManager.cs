@@ -13,6 +13,23 @@ public class GameManager : MonoBehaviour
 {    
     public static GameManager Instance { get; private set; }
 
+    [Header("win or lose panels")]
+    [SerializeField] private GameObject winLosePanel;
+    [SerializeField] private GameObject winPartPanel; 
+    [SerializeField] private GameObject losePartPanelNoReward;
+    [SerializeField] private GameObject losePartPanelReward;
+    [Header("win or lose buttons")]
+    [SerializeField] private Button nextGameWinCondition;
+    [SerializeField] private Button restartLoseConditionNoreward;
+    [SerializeField] private Button restartLoseConditionReward;
+    [SerializeField] private Button rewardForMoreSeconds;
+    [Header("win or lose texts")]
+    [SerializeField] private TextMeshProUGUI addSecondsInfoText;
+    [SerializeField] private TextMeshProUGUI secondsAmountText;
+    [SerializeField] private TextMeshProUGUI forRewardText;
+
+    [SerializeField] private GameObject timerPanel;
+    [SerializeField] private Button menu;
     [SerializeField] private Image backGround;
     [SerializeField] private Transform PanelsLocation;
     [SerializeField] private SpritesPack spritesPack;
@@ -31,6 +48,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button win;
     [SerializeField] private Button lose;
 
+    //translatings and texts
+    [Header("panels translation")]
+    [SerializeField] private TextMeshProUGUI winLoseMessages;
 
     private bool isRestaring;
     private bool isTouchActive;
@@ -51,21 +71,29 @@ public class GameManager : MonoBehaviour
     private float _timer;
     private readonly float timerUpdateCooldown = 1f;
 
-
     private Ray ray;
     private RaycastHit hit;
-
-    
+        
     private List<Panel> panels = new List<Panel>();
     private List<Panel> groupsToCompare = new List<Panel>();
 
     private Action nextLevelAction;
+    private Translation lang;
 
     private void Awake()
     {
         //Screen.SetResolution(1200, 600, true);
         //SaveLoadManager.Load();
         _audio.UnMute();
+        lang = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
+        winLosePanel.SetActive(false);
+        winPartPanel.SetActive(false);
+        losePartPanelNoReward.SetActive(false);
+        losePartPanelReward.SetActive(false);
+
+        addSecondsInfoText.text = lang.getMoreSecondsInfo;
+        secondsAmountText.text = Globals.RewardedSeconds.ToString() + " " + lang.secondsAmountPart;
+        forRewardText.text = lang.forRewarded;
 
         if (Instance != null && Instance != this)
         {
@@ -86,6 +114,7 @@ public class GameManager : MonoBehaviour
         timerSliderImage.fillAmount = 1f;
         timerText.text = "";
         currentTimer = Globals.StageDurationInSec;
+        timerPanel.SetActive(true);
 
         StartCoroutine(playShowPanels());
         StartCoroutine(fadeScreenOff());
@@ -105,7 +134,37 @@ public class GameManager : MonoBehaviour
             currentTimer = 0;
         });
 
+        menu.onClick.AddListener(() =>
+        {
+            _audio.PlaySound_Click();
+            SceneManager.LoadScene("MainMenu");
+        });
+
         Resources.UnloadUnusedAssets();
+
+        nextGameWinCondition.onClick.AddListener(() =>
+        {
+            _audio.PlaySound_Click();
+            ShowInterstitial();
+        });
+
+        restartLoseConditionNoreward.onClick.AddListener(() =>
+        {
+            _audio.PlaySound_Click();
+            restartCurrentGame();
+        });
+
+        restartLoseConditionReward.onClick.AddListener(() =>
+        {
+            _audio.PlaySound_Click();
+            restartCurrentGame();
+        });
+
+        rewardForMoreSeconds.onClick.AddListener(() =>
+        {
+            _audio.PlaySound_Click();
+            ShowRewarded();
+        });
     }
 
     
@@ -113,6 +172,13 @@ public class GameManager : MonoBehaviour
     
     private void Update()
     {
+        if (!isGameStarted) return;
+
+        if (currentTimer <= 0)
+        {
+            gameLose();
+        }
+
         if (isGameStarted)
         {
             currentTimer -= Time.deltaTime;
@@ -213,35 +279,98 @@ public class GameManager : MonoBehaviour
 
     private void gameWin()
     {
+        timerPanel.SetActive(false);
+        PanelsLocation.gameObject.SetActive(false);
+        winLosePanel.SetActive(true);
+        winPartPanel.SetActive(true);
+        winLoseMessages.text = lang.winText;
+
         isGameStarted = false;
         nextLevelAction = toNextLevel;
         SaveLoadManager.Save();
         isRestaring = true;
 
         Debug.LogError("GAME WIN");
-        ShowInterstitial();
+        
     }
 
     private void gameLose()
     {
+        PanelsLocation.gameObject.SetActive(false);
+        winLoseMessages.text = lang.loseText;
+        winLosePanel.SetActive(true);
+
         isGameStarted = false;
-        nextLevelAction = restartCurrentGame;
+        
         isRestaring = true;
         Debug.LogError("GAME LOST");
-        ShowInterstitial();
+
+        print(DateTime.Now.Subtract(Globals.TimeWhenLastRewardedWas).TotalSeconds + " till starting rewarded");
+
+        if (DateTime.Now.Subtract(Globals.TimeWhenLastRewardedWas).TotalSeconds > Globals.INTERVAL_FOR_REWARDED)
+        {            
+            losePartPanelReward.SetActive(true);
+            losePartPanelNoReward.SetActive(false);
+        }
+        else
+        {
+            timerPanel.SetActive(false);
+            losePartPanelReward.SetActive(false);
+            losePartPanelNoReward.SetActive(true);
+            nextLevelAction = restartCurrentGame;
+        }
     }
 
+
+    private void ShowRewarded()
+    {
+        StartCoroutine(playRewarded());
+    }
+    private IEnumerator playRewarded()
+    {
+        print("how much time till start rew: " + DateTime.Now.Subtract(Globals.TimeWhenLastRewardedWas).TotalSeconds);
+
+        if (DateTime.Now.Subtract(Globals.TimeWhenLastRewardedWas).TotalSeconds > Globals.INTERVAL_FOR_REWARDED)
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            _audio.Mute();
+            print("starting rewarded");
+                       
+            Globals.TimeWhenLastRewardedWas = DateTime.Now;
+            Globals.TimeWhenLastInterstitialWas = DateTime.Now;
+            Globals.RewardedAmount++;
+            YandexGame.OpenVideoEvent = advStarted;
+            YandexGame.CloseVideoEvent = advRewardedClosed;//nextLevelAction;
+            YandexGame.ErrorVideoEvent = advRewardedError;//nextLevelAction;
+            YandexGame.RewVideoShow(0);
+        }
+        else
+        {
+            print("not a time for interstitital");
+            nextLevelAction?.Invoke();
+        }
+    }
+
+
+
     private void ShowInterstitial()
+    {
+        StartCoroutine(playInterstitial());
+    }
+    private IEnumerator playInterstitial()
     {
         print("how much time till start: " + DateTime.Now.Subtract(Globals.TimeWhenLastInterstitialWas).TotalSeconds);
 
         if (DateTime.Now.Subtract(Globals.TimeWhenLastInterstitialWas).TotalSeconds > Globals.INTERVAL_FOR_INTERSTITITAL)
         {
+            yield return new WaitForSeconds(0.5f);
+
             _audio.Mute();
             print("starting interstitital");
 
             GameObject TransitionScreen = Instantiate(Resources.Load<GameObject>("TransitionCanvas"));
-            TransitionScreen.gameObject.name = "TransitionScreen";            
+            TransitionScreen.gameObject.name = "TransitionScreen";
             TransitionScreen.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(0, 0, 0, 1), 1);
 
             Globals.TimeWhenLastInterstitialWas = DateTime.Now;
@@ -255,7 +384,7 @@ public class GameManager : MonoBehaviour
         {
             print("not a time for interstitital");
             nextLevelAction?.Invoke();
-        }        
+        }
     }
 
     private void advStarted()
@@ -269,11 +398,34 @@ public class GameManager : MonoBehaviour
         nextLevelAction?.Invoke();
     }
 
+    private void advRewardedClosed()
+    {
+        print("rewarded was OK-closed");
+        //
+        PanelsLocation.gameObject.SetActive(true);
+        currentTimer += Globals.RewardedSeconds;
+        isGameStarted = true;
+        isRestaring = false;
+        winLosePanel.SetActive(false);
+        losePartPanelReward.SetActive(false);
+        losePartPanelNoReward.SetActive(false);
+        timerPanel.SetActive(true);
+    }
+
     private void advError()
     {
         print("adv was ERROR");
-        nextLevelAction?.Invoke();
+        nextLevelAction?.Invoke();        
     }
+
+    private void advRewardedError()
+    {
+        print("adv was ERROR");
+        losePartPanelReward.SetActive(false);
+        losePartPanelNoReward.SetActive(true);
+    }
+
+    
 
     private void restartCurrentGame()
     {
@@ -285,7 +437,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(fadeScreenOn());
         yield return new WaitForSeconds(1);
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("Gameplay");
     }
 
     private void toNextLevel()

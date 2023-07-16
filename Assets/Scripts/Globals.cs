@@ -7,9 +7,10 @@ public class Globals : MonoBehaviour
 {
     public static GameDesignManager GameDesignManager;
     public static PlayerData MainPlayerData;
-    public static int GameType;// = 1;
-    public static int GameLevel;// = 0;
+    public static int GameType = 1;// = 1;
+    public static int GameLevel = 3;// = 0;
     public static int Difficulty;// = 0;
+    public static int RewardedSeconds = 20;// = 10;
 
     //GAME PRESETS
     public const float BASE_VOLUME = 0.8f;
@@ -26,17 +27,17 @@ public class Globals : MonoBehaviour
 
     public static string CurrentLanguage;
 
-    public static float PanelSimpleRotationSpeed;// = 0.35f;
-    public static PairGroupTypes CurrentPairGroupType;// = PairGroupTypes.two;
+    public static float PanelSimpleRotationSpeed = 0.35f;// = 0.35f;
+    public static PairGroupTypes CurrentPairGroupType = PairGroupTypes.two;
 
 
     //level customization============================
-    public static float StageDurationInSec;// = 240;
-    public static Vector2 PanelsNumber;// = new Vector2(4, 2);
+    public static float StageDurationInSec = 240;
+    public static Vector2 PanelsNumber = new Vector2(4, 2);
 
     //===============================================
 
-    public static float PanelTimeForShowing;// = 1.1f;
+    public static float PanelTimeForShowing = 1.1f;
     
     /*
     {

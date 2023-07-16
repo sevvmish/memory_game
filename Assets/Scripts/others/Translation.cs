@@ -17,6 +17,12 @@ public class Translation : ScriptableObject
     public string Type2Description;
     public string Type3Description;
 
+    public string winText;
+    public string loseText;
+
+    public string getMoreSecondsInfo;
+    public string secondsAmountPart;
+    public string forRewarded;
 
     public Translation() { }
 }

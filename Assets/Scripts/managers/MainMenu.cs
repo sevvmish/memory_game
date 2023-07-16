@@ -10,13 +10,14 @@ using YG;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject mainIntro;
+    [SerializeField] private GameObject mainPlay;
     [SerializeField] private GameObject chooseType;
 
     [SerializeField] private Image backGround;
     [SerializeField] private AudioManager _audio;
     [SerializeField] private SpritesPack spritesPack;
 
+    [SerializeField] private Button loading;
     [SerializeField] private Button mainPlayButton;
     [SerializeField] private Button chooseType1;
     [SerializeField] private Button chooseType2;
@@ -60,26 +61,27 @@ public class MainMenu : MonoBehaviour
     {
         StartCoroutine(fadeScreenOff());
 
-        mainIntro.SetActive(true);
+        mainPlay.gameObject.SetActive(false);
+        loading.gameObject.SetActive(true);
+
         chooseType.SetActive(false);
         Type1_Descriptor.SetActive(false);
         Type2_Descriptor.SetActive(false);
         Type3_Descriptor.SetActive(false);
 
-        backGround.sprite = spritesPack.GetRandomBackGround();
-        mainIntro.SetActive(!Globals.IsInitiated);
-        chooseType.SetActive(Globals.IsInitiated);
+        backGround.sprite = spritesPack.GetRandomBackGround();        
+        //chooseType.SetActive(Globals.IsInitiated);
 
         mainPlayButton.onClick.AddListener(() =>
         {
-            mainIntro.SetActive(false);
+            mainPlay.gameObject.SetActive(false);
             chooseType.SetActive(true);
             _audio.PlaySound_Success();
         });
 
         chooseType1.onClick.AddListener(() =>
         {
-            mainIntro.SetActive(false);
+            mainPlay.gameObject.SetActive(false);
             chooseType.SetActive(false);
             _audio.PlaySound_Click();
             Type1_Descriptor.SetActive(true);
@@ -89,7 +91,7 @@ public class MainMenu : MonoBehaviour
 
         chooseType2.onClick.AddListener(() =>
         {
-            mainIntro.SetActive(false);
+            mainPlay.gameObject.SetActive(false);
             chooseType.SetActive(false);
             _audio.PlaySound_Click();
             Type1_Descriptor.SetActive(false);
@@ -99,7 +101,7 @@ public class MainMenu : MonoBehaviour
 
         chooseType3.onClick.AddListener(() =>
         {
-            mainIntro.SetActive(false);
+            mainPlay.gameObject.SetActive(false);
             chooseType.SetActive(false);
             _audio.PlaySound_Click();
             Type1_Descriptor.SetActive(false);
@@ -121,11 +123,16 @@ public class MainMenu : MonoBehaviour
         {
             TypeDescriptorsBack();
         });
+
+        playType1.onClick.AddListener(() =>
+        {
+            playType1Game();
+        });
     }
 
     private void TypeDescriptorsBack()
     {
-        mainIntro.SetActive(false);
+        mainPlay.gameObject.SetActive(false);
         chooseType.SetActive(true);
         _audio.PlaySound_Click();
         Type1_Descriptor.SetActive(false);
@@ -163,11 +170,7 @@ public class MainMenu : MonoBehaviour
         {
             Globals.IsInitiated = true;
             InitGame();
-        }
-        else
-        {
-            Globals.GameDesignManager.SetLevelData(true);
-        }        
+        }    
     }
 
     private void Update()
@@ -180,6 +183,8 @@ public class MainMenu : MonoBehaviour
                 {
                     isTryGetData = true;
                     YGDataReady();
+                    mainPlay.gameObject.SetActive(true);
+                    loading.gameObject.SetActive(false);
                 }
             }
         }
@@ -189,8 +194,10 @@ public class MainMenu : MonoBehaviour
             {
                 isLocalized = true;
                 Localize();
-            }
-            
+                panel1_Descriptor();
+                mainPlay.gameObject.SetActive(true);
+                loading.gameObject.SetActive(false);
+            }            
         }
         
     }
@@ -208,12 +215,29 @@ public class MainMenu : MonoBehaviour
         type1Description.text = lang.Type1Description;
         type2Description.text = lang.Type2Description;
         type3Description.text = lang.Type3Description;
-
     }
 
     private void panel1_Descriptor()
     {
+        for (int i = 0; i < Globals.MainPlayerData.GT1P.Length; i++)
+        {
+            
+            if (Globals.MainPlayerData.GT1P[i] == 1 || (i == 0 && Globals.MainPlayerData.GT1P[i] == 0))
+            {
+                GameObject c = Instantiate(cellWithNumber, placeForLevelCellsForType1);
+                c.SetActive(true);
+                c.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (i + 1).ToString();
+            }
+            else
+            {
+                Instantiate(cellWithBlock, placeForLevelCellsForType1);
+            }
+        }
+    }
 
+    private void playType1Game()
+    {
+        Globals.GameDesignManager.SetLevelData(false);
     }
 
     private IEnumerator fadeScreenOff()
