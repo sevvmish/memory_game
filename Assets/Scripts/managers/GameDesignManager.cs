@@ -54,13 +54,13 @@ public class GameDesignManager
                     switch ((ThreePairCellsList)p)
                     {
                         case ThreePairCellsList._3_2:
-                            levelDuration = 10;
+                            levelDuration = 12 + difficulty;
                             rewardsSecs = 4;
                             panelDuration = 1.2f;
                             break;
 
                         case ThreePairCellsList._3_3:
-                            levelDuration = 13 + difficulty;
+                            levelDuration = 15 + difficulty;
                             rewardsSecs = 5;
                             panelDuration = 1.2f;
                             break;

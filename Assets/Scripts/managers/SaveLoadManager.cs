@@ -10,7 +10,7 @@ public class SaveLoadManager
     //[DllImport("__Internal")]
     //private static extern void LoadExtern();
 
-    private const string ID = "Playerdata20";
+    private const string ID = "Playerdata24";
 
     public static void Save()
     {
@@ -55,6 +55,7 @@ public class SaveLoadManager
         {
             YandexGame.LoadCloud();
             fromSave = YandexGame.savesData.PlayerMainData;
+            Debug.Log("что получено из сейва облака: " + fromSave);
         }
         catch (System.Exception ex)
         {

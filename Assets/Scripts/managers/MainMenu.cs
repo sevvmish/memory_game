@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using YG;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private Button resetSave;
+
     [SerializeField] private GameObject mainPlay;
     [SerializeField] private GameObject chooseType;
 
@@ -26,32 +27,26 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private GameObject Type1_Descriptor;
     [SerializeField] private GameObject Type2_Descriptor;
-    [SerializeField] private GameObject Type3_Descriptor;
 
     [SerializeField] private GameObject cellWithBlock;
     [SerializeField] private GameObject cellWithNumber;
     [SerializeField] private Transform placeForLevelCellsForType1;
     [SerializeField] private Transform placeForLevelCellsForType2;
-    [SerializeField] private Transform placeForLevelCellsForType3;
 
     [SerializeField] private Button playType1;
     [SerializeField] private Button playType2;
-    [SerializeField] private Button playType3;
 
     [SerializeField] private Button Type1_DescriptorBack;
     [SerializeField] private Button Type2_DescriptorBack;
-    [SerializeField] private Button Type3_DescriptorBack;
 
     [Header("panels tranlation")]
     [SerializeField] private TextMeshProUGUI playButtonText;
 
     [SerializeField] private TextMeshProUGUI type1Name;
     [SerializeField] private TextMeshProUGUI type2Name;
-    [SerializeField] private TextMeshProUGUI type3Name;
 
     [SerializeField] private TextMeshProUGUI type1Description;
     [SerializeField] private TextMeshProUGUI type2Description;
-    [SerializeField] private TextMeshProUGUI type3Description;
 
     private bool isTryGetData;
     private bool isLocalized;
@@ -77,7 +72,6 @@ public class MainMenu : MonoBehaviour
         chooseType.SetActive(false);
         Type1_Descriptor.SetActive(false);
         Type2_Descriptor.SetActive(false);
-        Type3_Descriptor.SetActive(false);
 
         backGround.sprite = spritesPack.GetRandomBackGround();        
         //chooseType.SetActive(Globals.IsInitiated);
@@ -96,7 +90,6 @@ public class MainMenu : MonoBehaviour
             _audio.PlaySound_Click();
             Type1_Descriptor.SetActive(true);
             Type2_Descriptor.SetActive(false);
-            Type3_Descriptor.SetActive(false);
         });
 
         chooseType2.onClick.AddListener(() =>
@@ -106,7 +99,6 @@ public class MainMenu : MonoBehaviour
             _audio.PlaySound_Click();
             Type1_Descriptor.SetActive(false);
             Type2_Descriptor.SetActive(true);
-            Type3_Descriptor.SetActive(false);
         });
 
         chooseType3.onClick.AddListener(() =>
@@ -116,7 +108,6 @@ public class MainMenu : MonoBehaviour
             _audio.PlaySound_Click();
             Type1_Descriptor.SetActive(false);
             Type2_Descriptor.SetActive(false);
-            Type3_Descriptor.SetActive(true);
         });
 
         Type1_DescriptorBack.onClick.AddListener(() =>
@@ -130,13 +121,7 @@ public class MainMenu : MonoBehaviour
             _audio.PlaySound_Click();
             TypeDescriptorsBack();
         });
-
-        Type3_DescriptorBack.onClick.AddListener(() =>
-        {
-            _audio.PlaySound_Click();
-            TypeDescriptorsBack();
-        });
-
+                
         playType1.onClick.AddListener(() =>
         {
             _audio.PlaySound_Click();
@@ -150,6 +135,15 @@ public class MainMenu : MonoBehaviour
             Globals.IsRepeteGame = false;
             playType2Game();
         });
+
+        /*
+        resetSave.onClick.AddListener(() =>
+        {
+            _audio.PlaySound_Click();
+            YandexGame.ResetSaveProgress();
+            Globals.MainPlayerData = new PlayerData();
+            YandexGame.SaveCloud();
+        });*/
     }
 
     private void TypeDescriptorsBack()
@@ -159,7 +153,6 @@ public class MainMenu : MonoBehaviour
         _audio.PlaySound_Click();
         Type1_Descriptor.SetActive(false);
         Type2_Descriptor.SetActive(false);
-        Type3_Descriptor.SetActive(false);
     }
 
     private void InitGame()
@@ -248,11 +241,9 @@ public class MainMenu : MonoBehaviour
 
         type1Name.text = lang.Type1Name;
         type2Name.text = lang.Type2Name;
-        type3Name.text = lang.Type3Name;
 
         type1Description.text = lang.Type1Description;
         type2Description.text = lang.Type2Description;
-        type3Description.text = lang.Type3Description;
     }
 
     private void panel1_Descriptor()

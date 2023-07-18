@@ -50,6 +50,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Sprite soundONSprite;
     [SerializeField] private Sprite soundOffSprite;
 
+    [Header("MENU")]
+    [SerializeField] private GameObject hint1;
+    [SerializeField] private TextMeshProUGUI hint1Text;
+    [SerializeField] private GameObject hint2;
+    [SerializeField] private TextMeshProUGUI hint2Text;
+
+    [SerializeField] private GameObject confeti;
+
     public AudioManager GetAudio { get => _audio; }
 
     //to del    
@@ -104,13 +112,18 @@ public class GameManager : MonoBehaviour
             if (Globals.PanelsNumber.x < 8) mainCamera.fieldOfView = 70;
         }
 
-        
-            
         lang = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
+
+        hint1.SetActive(false);
+        hint1Text.text = lang.hint1;
+        hint2.SetActive(false);
+        hint2Text.text = lang.hint2;
+                
         winLosePanel.SetActive(false);
         winPartPanel.SetActive(false);
         losePartPanelNoReward.SetActive(false);
         losePartPanelReward.SetActive(false);
+        confeti.SetActive(false);
 
         addSecondsInfoText.text = lang.getMoreSecondsInfo;
         secondsAmountText.text = Globals.RewardedSeconds.ToString() + " " + lang.secondsAmountPart;
@@ -264,6 +277,11 @@ public class GameManager : MonoBehaviour
         {
             _audio.Mute();
         }
+
+        if (Globals.MainPlayerData.H1 == 0 && Globals.GameLevel == 0)
+        {
+            StartCoroutine(showHints());
+        }
     }
 
 
@@ -389,6 +407,7 @@ public class GameManager : MonoBehaviour
     private void gameWin()
     {
         _audio.PlaySound_WinGame();
+        confeti.SetActive(true);
         timerPanel.SetActive(false);
         //PanelsLocation.gameObject.SetActive(false);
         hidePanel();
@@ -721,5 +740,36 @@ public class GameManager : MonoBehaviour
         TransitionScreen.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(0, 0, 0, 0), 0);
         TransitionScreen.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(0, 0, 0, 1), 1);
         yield return new WaitForSeconds(1);                
+    }
+
+    private IEnumerator showHints()
+    {        
+        yield return new WaitForSeconds(2);
+        Globals.MainPlayerData.H1 = 1;
+        Globals.MainPlayerData.H1 = 2;
+        SaveLoadManager.Save();
+
+
+        hint1.transform.DOScale(Vector3.zero, 0);
+        hint1.SetActive(true);
+        _audio.PlaySound_Success();
+        hint1.transform.DOScale(Vector3.one, 0.3f);
+
+        yield return new WaitForSeconds(5);
+        hint1.transform.DOScale(Vector3.zero, 0.3f);
+
+        yield return new WaitForSeconds(1);
+        hint1.SetActive(false);
+
+        hint2.transform.DOScale(Vector3.zero, 0);
+        hint2.SetActive(true);
+        hint2.transform.DOScale(Vector3.one, 0.3f);
+        _audio.PlaySound_Success();
+
+        yield return new WaitForSeconds(5);
+        hint2.transform.DOScale(Vector3.zero, 0.3f);
+        yield return new WaitForSeconds(1);
+        hint2.SetActive(false);
+                
     }
 }

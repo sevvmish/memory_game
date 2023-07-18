@@ -24,5 +24,8 @@ public class Translation : ScriptableObject
     public string secondsAmountPart;
     public string forRewarded;
 
+    public string hint1;
+    public string hint2;
+
     public Translation() { }
 }

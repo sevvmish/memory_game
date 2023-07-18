@@ -12,6 +12,8 @@ public class PlayerData
     public string L;
     public int M;
     public int S;
+    public int H1;
+    public int H2;
 
     public PlayerData()
     {
@@ -21,6 +23,8 @@ public class PlayerData
         L = ""; //prefered language
         M = 1; //mobile platform? 1 - true;
         S = 1; // sound on? 1 - true;
+        H1 = 0;
+        H2 = 0;
         Debug.Log("created PlayerData instance");
     }
 

@@ -17,7 +17,7 @@ MonoBehaviour:
   leaderboardEnable: 0
   saveCloud: 1
   flush: 0
-  localSaveSync: 0
+  localSaveSync: 1
   saveCloudInterval: 1
   metricaEnable: 0
   metricaCounterID: 0
