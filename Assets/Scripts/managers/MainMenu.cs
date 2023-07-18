@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using YG;
 
@@ -111,21 +112,26 @@ public class MainMenu : MonoBehaviour
 
         Type1_DescriptorBack.onClick.AddListener(() =>
         {
+            _audio.PlaySound_Click();
             TypeDescriptorsBack();
         });
 
         Type2_DescriptorBack.onClick.AddListener(() =>
         {
+            _audio.PlaySound_Click();
             TypeDescriptorsBack();
         });
 
         Type3_DescriptorBack.onClick.AddListener(() =>
         {
+            _audio.PlaySound_Click();
             TypeDescriptorsBack();
         });
 
         playType1.onClick.AddListener(() =>
         {
+            _audio.PlaySound_Click();
+            Globals.IsRepeteGame = false;
             playType1Game();
         });
     }
@@ -144,6 +150,13 @@ public class MainMenu : MonoBehaviour
     {
         SaveLoadManager.Load();
 
+        print("SDK enabled: " + YandexGame.SDKEnabled);
+        Globals.CurrentLanguage = YandexGame.savesData.language;
+        print("language set to: " + Globals.CurrentLanguage);
+
+        Globals.IsMobilePlatform = YandexGame.EnvironmentData.isMobile;
+        print("platform mobile: " + Globals.IsMobilePlatform);
+
         if (Globals.TimeWhenStartedPlaying == DateTime.MinValue)
         {
             Globals.TimeWhenStartedPlaying = DateTime.Now;
@@ -152,20 +165,14 @@ public class MainMenu : MonoBehaviour
         }
 
         Globals.CurrentLanguage = Globals.MainPlayerData.L;
-        Globals.GameType = 1;
-        Globals.GameLevel = Globals.MainPlayerData.GT1P.Sum();
-        print("type: " + Globals.GameType + ", level: " + Globals.GameLevel);
+        
 
         Globals.GameDesignManager = new GameDesignManager();
         //Globals.GameDesignManager.SetLevelData(true);
     }
 
     private void YGDataReady()
-    {
-        print("SDK enabled: " + YandexGame.SDKEnabled);
-        Globals.CurrentLanguage = YandexGame.savesData.language;
-        print("language set to: " + Globals.CurrentLanguage);
-
+    {        
         if (!Globals.IsInitiated)
         {
             Globals.IsInitiated = true;
@@ -195,6 +202,7 @@ public class MainMenu : MonoBehaviour
                 isLocalized = true;
                 Localize();
                 panel1_Descriptor();
+                panel2_Descriptor();
                 mainPlay.gameObject.SetActive(true);
                 loading.gameObject.SetActive(false);
             }            
@@ -219,6 +227,9 @@ public class MainMenu : MonoBehaviour
 
     private void panel1_Descriptor()
     {
+        
+        //print("type: " + Globals.GameType + ", level: " + Globals.GameLevel);
+
         for (int i = 0; i < Globals.MainPlayerData.GT1P.Length; i++)
         {
             
@@ -226,7 +237,10 @@ public class MainMenu : MonoBehaviour
             {
                 GameObject c = Instantiate(cellWithNumber, placeForLevelCellsForType1);
                 c.SetActive(true);
+                c.gameObject.name = i.ToString();
                 c.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (i + 1).ToString();
+                c.GetComponent<ClickOnCurrentLevel>().LevelType = 1;
+                c.GetComponent<ClickOnCurrentLevel>().CurrentLevel = i;
             }
             else
             {
@@ -235,9 +249,44 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    private void panel2_Descriptor()
+    {
+        for (int i = 0; i < Globals.MainPlayerData.GT2P.Length; i++)
+        {
+
+            if (Globals.MainPlayerData.GT2P[i] == 1 || (i == 0 && Globals.MainPlayerData.GT2P[i] == 0))
+            {
+                GameObject c = Instantiate(cellWithNumber, placeForLevelCellsForType2);
+                c.SetActive(true);
+                c.gameObject.name = i.ToString();
+                c.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (i + 1).ToString();
+                c.GetComponent<ClickOnCurrentLevel>().LevelType = 2;
+                c.GetComponent<ClickOnCurrentLevel>().CurrentLevel = i;
+            }
+            else
+            {
+                Instantiate(cellWithBlock, placeForLevelCellsForType2);
+            }
+        }
+    }
+
     private void playType1Game()
     {
+        Globals.GameType = 1;
+        Globals.GameLevel = Globals.MainPlayerData.GT1P.Sum();
         Globals.GameDesignManager.SetLevelData(false);
+    }
+
+    private void playType2Game()
+    {
+        Globals.GameType = 2;
+        Globals.GameLevel = Globals.MainPlayerData.GT2P.Sum();
+        Globals.GameDesignManager.SetLevelData(false);
+    }
+
+    public static void RepeteGame(int _type, int number)
+    {        
+        Globals.GameDesignManager.SetLevelData(_type, number);
     }
 
     private IEnumerator fadeScreenOff()
@@ -259,4 +308,5 @@ public class MainMenu : MonoBehaviour
         TransitionScreen.transform.GetChild(0).GetComponent<Image>().DOColor(new Color(0, 0, 0, 1), 1);
         yield return new WaitForSeconds(1);
     }
+
 }

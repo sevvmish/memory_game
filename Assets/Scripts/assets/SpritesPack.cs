@@ -14,7 +14,7 @@ public class SpritesPack : MonoBehaviour
 
     public Pack[] packs;
 
-    public Sprite[] GetRandomPack()
+    public Sprite[] GetRandomPack(int limit)
     {
         if (packs.Length == 0)
         {
@@ -22,7 +22,17 @@ public class SpritesPack : MonoBehaviour
         }
         else
         {
-            return packs[UnityEngine.Random.Range(0, packs.Length)].sprites;
+            int value = 0;
+            int packID = -1;
+
+            for (int i = 0; i < 100; i++)
+            {
+                value = UnityEngine.Random.Range(0, packs.Length);
+                packID = packs[value].ID;
+                if (Globals.PreviousPackIDNumber != packID) break;
+            }
+            Globals.PreviousPackIDNumber = packID;
+            return packs[value].sprites;
         }
     }
 

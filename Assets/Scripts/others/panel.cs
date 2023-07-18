@@ -153,7 +153,7 @@ public class Panel : MonoBehaviour
 
     }
 
-    public static int CreatePanels(int horizontaly, int vertically, GameObject basicPanel, Transform PanelsLocation, ref List<Panel> panels)
+    public static int CreatePanels(int horizontaly, int vertically, GameObject basicPanel, Transform PanelsLocation, ref List<Panel> panels, int additionalPanels)
     {
         int panelsAmount = 0;
 
@@ -195,6 +195,44 @@ public class Panel : MonoBehaviour
             xAxis = 0.7f;
         }
 
+        if (horizontaly == 3 && vertically == 2 && additionalPanels == 2)
+        {
+            zAxis -= zAxis * 0.1f;
+        }
+        else if (horizontaly == 4 && vertically == 2 && additionalPanels == 2)
+        {
+            yAxis -= 0.5f;
+        }
+        else if (horizontaly == 4 && vertically == 2 && additionalPanels == 4)
+        {
+            zAxis -= zAxis * 0.1f;
+        }
+        else if (horizontaly == 4 && vertically == 3 && additionalPanels == 2)
+        {
+            zAxis -= zAxis * 0.1f;
+        }
+        else if (horizontaly == 4 && vertically == 3 && additionalPanels == 4)
+        {
+            zAxis -= zAxis * 0.075f;
+            yAxis -= 0.5f;
+        }
+        else if (horizontaly == 4 && vertically == 4 && additionalPanels == 4)
+        {
+            zAxis -= zAxis * 0.075f;            
+        }
+        else if (horizontaly == 5 && vertically == 4 && additionalPanels == 4)
+        {
+            zAxis -= zAxis * 0.25f;
+        }
+        else if (horizontaly == 6 && vertically == 4 && additionalPanels == 4)
+        {
+            zAxis -= zAxis * 0.25f;
+        }
+        else if (horizontaly == 6 && vertically == 5 && additionalPanels == 6)
+        {
+            zAxis -= zAxis * 0.25f;
+        }
+
         float startX = (float)horizontaly / 2 - 0.5f;
         float startY = (float)vertically / 2 - 0.5f;
 
@@ -207,6 +245,223 @@ public class Panel : MonoBehaviour
                 Panel p = g.GetComponent<Panel>();
                 panels.Add(p);
                 panelsAmount++;
+            }
+        }
+
+        if (additionalPanels > 0)
+        {
+            if (horizontaly == 3 && vertically == 2 && additionalPanels == 2)
+            {                
+                GameObject g = Instantiate(basicPanel, new Vector3(xAxis, startY - 2 + yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                Panel p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis, startY + 1 + yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+            }
+            else if (horizontaly == 4 && vertically == 2 && additionalPanels == 2)
+            {                
+                GameObject g = Instantiate(basicPanel, new Vector3(xAxis - 0.5f, startY + 1 + yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                Panel p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 0.5f, startY + 1 + yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+            }
+            else if (horizontaly == 4 && vertically == 2 && additionalPanels == 4)
+            {                
+                GameObject g = Instantiate(basicPanel, new Vector3(xAxis - 0.5f, startY - 2 + yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                Panel p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 0.5f, startY - 2 + yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis - 0.5f, startY + 1 + yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 0.5f, startY + 1 + yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+            }
+            else if (horizontaly == 4 && vertically == 3 && additionalPanels == 2)
+            {
+                GameObject g = Instantiate(basicPanel, new Vector3(xAxis - 2.5f, yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                Panel p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 2.5f, yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+            }
+            else if (horizontaly == 4 && vertically == 3 && additionalPanels == 4)
+            {
+                GameObject g = Instantiate(basicPanel, new Vector3(xAxis - 2.5f, yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                Panel p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 2.5f, yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis - 0.5f, startY + 1 + yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 0.5f, startY + 1 + yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+            }
+            else if (horizontaly == 4 && vertically == 4 && additionalPanels == 4)
+            {
+                GameObject g = Instantiate(basicPanel, new Vector3(xAxis - 2.5f, yAxis-0.5f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                Panel p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis - 2.5f, yAxis+0.5f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 2.5f, yAxis - 0.5f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 2.5f, yAxis + 0.5f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+            }
+            else if (horizontaly == 5 && vertically == 4 && additionalPanels == 4)
+            {
+                GameObject g = Instantiate(basicPanel, new Vector3(xAxis - 3f, yAxis - 0.5f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                Panel p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis - 3f, yAxis + 0.5f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 3f, yAxis - 0.5f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 3f, yAxis + 0.5f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+            }
+            else if (horizontaly == 6 && vertically == 4 && additionalPanels == 4)
+            {
+                GameObject g = Instantiate(basicPanel, new Vector3(xAxis - 3.5f, yAxis - 0.5f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                Panel p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis - 3.5f, yAxis + 0.5f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 3.5f, yAxis - 0.5f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 3.5f, yAxis + 0.5f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+            }
+            else if (horizontaly == 6 && vertically == 5 && additionalPanels == 6)
+            {
+                GameObject g = Instantiate(basicPanel, new Vector3(xAxis - 3.5f, yAxis - 1f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                Panel p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis - 3.5f, yAxis + 1f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+                g = Instantiate(basicPanel, new Vector3(xAxis - 3.5f, yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 3.5f, yAxis - 1f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 3.5f, yAxis + 1f, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
+                g = Instantiate(basicPanel, new Vector3(xAxis + 3.5f, yAxis, zAxis), Quaternion.identity, PanelsLocation);
+                g.transform.localEulerAngles = new Vector3(0, 0, UnityEngine.Random.Range(-1.5f, 1.5f));
+                p = g.GetComponent<Panel>();
+                panels.Add(p);
+                panelsAmount++;
+
             }
         }
 

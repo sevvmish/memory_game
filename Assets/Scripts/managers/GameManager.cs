@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            return (int)(Globals.PanelsNumber.x * Globals.PanelsNumber.y);
+            return (int)(Globals.PanelsNumber.x * Globals.PanelsNumber.y) + Globals.AdditionalPanelsAmount;
         }
     }
 
@@ -80,10 +80,22 @@ public class GameManager : MonoBehaviour
     private Action nextLevelAction;
     private Translation lang;
 
+    private int OneByOnePanelOpened = 0;
+
     private void Awake()
     {
         //Screen.SetResolution(1200, 600, true);
         //SaveLoadManager.Load();
+
+        if (Globals.IsMobilePlatform)
+        {
+            mainCamera.fieldOfView = 60;
+        }
+        else
+        {
+            if (Globals.PanelsNumber.x < 8) mainCamera.fieldOfView = 70;
+        }
+
         _audio.UnMute();
         lang = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
         winLosePanel.SetActive(false);
@@ -107,8 +119,9 @@ public class GameManager : MonoBehaviour
         pairAmount = (int)Globals.CurrentPairGroupType;
                 
         int count = Panel.CreatePanels((int)Globals.PanelsNumber.x, (int)Globals.PanelsNumber.y, 
-            basicPanel, PanelsLocation, ref panels);        
-        Panel.ArrangePanels(spritesPack.GetRandomPack(), count, pairAmount, ref panels);
+            basicPanel, PanelsLocation, ref panels, Globals.AdditionalPanelsAmount);        
+                
+        Panel.ArrangePanels(spritesPack.GetRandomPack((int)(count/pairAmount)), count, pairAmount, ref panels);
         backGround.sprite = spritesPack.GetRandomBackGround();
 
         timerSliderImage.fillAmount = 1f;
@@ -193,8 +206,8 @@ public class GameManager : MonoBehaviour
                 _timer += Time.deltaTime;
             }
         }
-        
 
+       
         //check for finding
         if (groupsToCompare.Count == pairAmount)
         {
@@ -225,6 +238,13 @@ public class GameManager : MonoBehaviour
                 }
 
                 groupsToCompare.Clear();
+                OneByOnePanelOpened++;
+
+                if (OneByOnePanelOpened > 1)
+                {
+                    //
+                    //kjfbkerbfhebrfhvjevfejvfjev
+                }
             }     
             else
             {
@@ -236,6 +256,8 @@ public class GameManager : MonoBehaviour
                         groupsToCompare.Remove(groupsToCompare[i]);
                     }
                 }
+
+                OneByOnePanelOpened = 0;
             }
         } 
         else if (groupsToCompare.Count > 0)
@@ -245,8 +267,10 @@ public class GameManager : MonoBehaviour
                 if ((groupsToCompare[i].IsFaceOn && groupsToCompare[i].IsClosing) || !groupsToCompare[i].IsFaceOn)
                 {
                     groupsToCompare.Remove(groupsToCompare[i]);
+                    OneByOnePanelOpened = 0;
                 }
             }
+            
         }
      
         //WIN CONDITION
@@ -279,31 +303,45 @@ public class GameManager : MonoBehaviour
 
     private void gameWin()
     {
+        _audio.PlaySound_WinGame();
         timerPanel.SetActive(false);
-        PanelsLocation.gameObject.SetActive(false);
+        //PanelsLocation.gameObject.SetActive(false);
+        hidePanel();
         winLosePanel.SetActive(true);
         winPartPanel.SetActive(true);
         winLoseMessages.text = lang.winText;
 
         isGameStarted = false;
         nextLevelAction = toNextLevel;
-        SaveLoadManager.Save();
+        if (!Globals.IsRepeteGame) SaveLoadManager.Save();
         isRestaring = true;
 
-        Debug.LogError("GAME WIN");
-        
+        Debug.LogWarning("GAME WIN");
+
+    }
+
+    private void hidePanel()
+    {
+        PanelsLocation.transform.DOMove(new Vector3(0, -10, 0), 1);
+    }
+
+    private void showPanel()
+    {
+        PanelsLocation.transform.DOMove(Vector3.zero, 1);
     }
 
     private void gameLose()
     {
-        PanelsLocation.gameObject.SetActive(false);
+        _audio.PlaySound_LoseGame();
+        //PanelsLocation.gameObject.SetActive(false);
+        hidePanel();
         winLoseMessages.text = lang.loseText;
         winLosePanel.SetActive(true);
 
         isGameStarted = false;
         
         isRestaring = true;
-        Debug.LogError("GAME LOST");
+        Debug.LogWarning("GAME LOST");
 
         print(DateTime.Now.Subtract(Globals.TimeWhenLastRewardedWas).TotalSeconds + " till starting rewarded");
 
@@ -402,7 +440,8 @@ public class GameManager : MonoBehaviour
     {
         print("rewarded was OK-closed");
         //
-        PanelsLocation.gameObject.SetActive(true);
+        //PanelsLocation.gameObject.SetActive(true);
+        showPanel();
         currentTimer += Globals.RewardedSeconds;
         isGameStarted = true;
         isRestaring = false;
@@ -410,6 +449,9 @@ public class GameManager : MonoBehaviour
         losePartPanelReward.SetActive(false);
         losePartPanelNoReward.SetActive(false);
         timerPanel.SetActive(true);
+        _audio.UnMute();
+        OneByOnePanelOpened = 0;
+        groupsToCompare.Clear();
     }
 
     private void advError()
@@ -437,7 +479,16 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(fadeScreenOn());
         yield return new WaitForSeconds(1);
-        SceneManager.LoadScene("Gameplay");
+        
+
+        if (!Globals.IsRepeteGame)
+        {
+            SceneManager.LoadScene("Gameplay");
+        }
+        else
+        {
+            Globals.GameDesignManager.SetLevelData(Globals.GameTypeRepete, Globals.GameLevelRepete);
+        }
     }
 
     private void toNextLevel()
@@ -450,7 +501,16 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(fadeScreenOn());
         yield return new WaitForSeconds(1);
-        Globals.GameDesignManager.SetLevelData(true);
+
+        if (!Globals.IsRepeteGame)
+        {
+            Globals.GameDesignManager.SetLevelData(true);
+        }
+        else
+        {
+            Globals.GameDesignManager.SetLevelData(Globals.GameTypeRepete, Globals.GameLevelRepete);
+        }
+        
     }
 
     private void updateTimer()
@@ -512,6 +572,8 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
+        _audio.PlaySound_CardShuffle();
+
         float x = (xmin + xmax) / 2f;
         float y = (ymin + ymax) / 2f;
 
@@ -537,6 +599,8 @@ public class GameManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.02f);
         }
+
+        _audio.StopAny();
 
         for (int i = 0; i < panels.Count; i++)
         {

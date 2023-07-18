@@ -10,6 +10,7 @@ public class PlayerData
     public int[] GT2P;
     public int LGT;
     public string L;
+    public int M;
 
     public PlayerData()
     {
@@ -17,6 +18,7 @@ public class PlayerData
         GT2P = new int[GameDesignManager.MAX_LVL_TYPE_2]; //save of level progress for type 2 of game 3/3
         LGT = 0; //last played game type
         L = ""; //prefered language
+        M = 1; //mobile platform? 1 - true;
         Debug.Log("created PlayerData instance");
     }
 

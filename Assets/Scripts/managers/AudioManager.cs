@@ -46,6 +46,11 @@ public class AudioManager : MonoBehaviour
         playStandartSound(2, audioPack.LoseMelody);
     }
 
+    public void StopAny()
+    {
+        _audio.Stop();
+    }
+
     private void playStandartSound(int _priority, AudioClip clip)
     {
         if ((priority > _priority && _audio.isPlaying) || (_audio.clip == clip && _audio.isPlaying)) return;
