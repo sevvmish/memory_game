@@ -41,10 +41,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image timerSliderImage;
     [SerializeField] private TextMeshProUGUI timerText;
 
+    [Header("MENU")]
+    [SerializeField] private GameObject menuPanel;
+    [SerializeField] private Button toMainMenu;
+    [SerializeField] private Button continueGame;
+    [SerializeField] private Button sound;
+    [SerializeField] private Button restart;
+    [SerializeField] private Sprite soundONSprite;
+    [SerializeField] private Sprite soundOffSprite;
+
     public AudioManager GetAudio { get => _audio; }
 
-    //to del
-    [SerializeField] private Button re;
+    //to del    
     [SerializeField] private Button win;
     [SerializeField] private Button lose;
 
@@ -96,7 +104,8 @@ public class GameManager : MonoBehaviour
             if (Globals.PanelsNumber.x < 8) mainCamera.fieldOfView = 70;
         }
 
-        _audio.UnMute();
+        
+            
         lang = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
         winLosePanel.SetActive(false);
         winPartPanel.SetActive(false);
@@ -129,29 +138,83 @@ public class GameManager : MonoBehaviour
         currentTimer = Globals.StageDurationInSec;
         timerPanel.SetActive(true);
 
+        menuPanel.SetActive(false);
+
         StartCoroutine(playShowPanels());
         StartCoroutine(fadeScreenOff());
 
-        re.onClick.AddListener(() => 
-        {
-            SceneManager.LoadScene("Gameplay");
-        });
-
+        //TO DEL
         win.onClick.AddListener(() =>
         {
             gameWin();
         });
-
+        //TO DEL
         lose.onClick.AddListener(() =>
         {
             currentTimer = 0;
         });
 
+        //MENU========================================================
         menu.onClick.AddListener(() =>
+        {
+            _audio.PlaySound_Click();
+            menuPanel.SetActive(true);
+            isGameStarted = false;
+        });
+        toMainMenu.onClick.AddListener(() =>
         {
             _audio.PlaySound_Click();
             SceneManager.LoadScene("MainMenu");
         });
+        continueGame.onClick.AddListener(() =>
+        {
+            _audio.PlaySound_Click();
+            isGameStarted = true;
+            menuPanel.SetActive(false);
+        });
+        restart.onClick.AddListener(() =>
+        {
+            _audio.PlaySound_Click();
+            restartCurrentGame();
+        });
+        sound.onClick.AddListener(() =>
+        {
+            if (Globals.IsSoundOn)
+            {
+                _audio.Mute();
+                Globals.IsSoundOn = false;
+                Globals.MainPlayerData.S = 0;
+            }
+            else
+            {
+                _audio.UnMute();
+                _audio.PlaySound_Click();
+                Globals.IsSoundOn = true;
+                Globals.MainPlayerData.S = 1;
+            }
+
+            if (Globals.IsSoundOn)
+            {
+                sound.GetComponent<Image>().sprite = soundONSprite;
+            }
+            else
+            {
+                sound.GetComponent<Image>().sprite = soundOffSprite;
+            }
+
+            SaveLoadManager.Save();
+
+        });
+        if (Globals.IsSoundOn)
+        {
+            sound.GetComponent<Image>().sprite = soundONSprite;
+        }
+        else
+        {
+            sound.GetComponent<Image>().sprite = soundOffSprite;
+        }
+        
+        //============================================================
 
         Resources.UnloadUnusedAssets();
 
@@ -178,13 +241,35 @@ public class GameManager : MonoBehaviour
             _audio.PlaySound_Click();
             ShowRewarded();
         });
+
+        if (Globals.IsSoundOn)
+        {
+            _audio.UnMute();
+        }
+        else
+        {
+            _audio.Mute();
+        }
     }
 
-    
+    private void Start()
+    {
+        print(Globals.IsSoundOn);
 
-    
+        if (Globals.IsSoundOn)
+        {
+            _audio.UnMute();
+        }
+        else
+        {
+            _audio.Mute();
+        }
+    }
+
+
     private void Update()
     {
+        
         if (!isGameStarted) return;
 
         if (currentTimer <= 0)
@@ -449,7 +534,14 @@ public class GameManager : MonoBehaviour
         losePartPanelReward.SetActive(false);
         losePartPanelNoReward.SetActive(false);
         timerPanel.SetActive(true);
-        _audio.UnMute();
+        if (Globals.IsSoundOn)
+        {
+            _audio.UnMute();
+        }
+        else
+        {
+            _audio.Mute();
+        }
         OneByOnePanelOpened = 0;
         groupsToCompare.Clear();
     }
@@ -577,7 +669,7 @@ public class GameManager : MonoBehaviour
         float x = (xmin + xmax) / 2f;
         float y = (ymin + ymax) / 2f;
 
-        for (float j = 0; j < 5; j+=0.15f)
+        for (float j = 0; j < 4; j+=0.15f)
         {
             for (int i = 0; i < panels.Count; i++)
             {

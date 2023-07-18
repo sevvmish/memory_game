@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Globals : MonoBehaviour
@@ -8,8 +6,8 @@ public class Globals : MonoBehaviour
     public static GameDesignManager GameDesignManager;
     public static PlayerData MainPlayerData;
     public static int GameType = 1;// = 1;
-    public static int GameLevel = 3;// = 0;
-    public static int Difficulty;// = 0;
+    public static int GameLevel = 1;// = 0;
+    public static int Difficulty = 1;// = 0;
     public static int RewardedSeconds = 20;// = 10;
     public static int AdditionalPanelsAmount = 0;
 
@@ -17,6 +15,7 @@ public class Globals : MonoBehaviour
     public const float BASE_VOLUME = 0.8f;
     public static bool IsMobilePlatform;
     public static bool IsInitiated;
+    public static bool IsSoundOn = true;
 
     public static bool IsRepeteGame;
     public static int GameTypeRepete = 1;// = 1;
@@ -35,16 +34,16 @@ public class Globals : MonoBehaviour
     public static int PreviousPackIDNumber;
 
     public static float PanelSimpleRotationSpeed = 0.3f;// = 0.35f;
-    public static PairGroupTypes CurrentPairGroupType = PairGroupTypes.two;
+    public static PairGroupTypes CurrentPairGroupType = PairGroupTypes.three;
 
 
     //level customization============================
-    public static float StageDurationInSec = 240;
-    public static Vector2 PanelsNumber = new Vector2(3, 2);
+    public static float StageDurationInSec = 100;
+    public static Vector2 PanelsNumber = new Vector2(6, 5);
 
     //===============================================
 
-    public static float PanelTimeForShowing = 1.1f;
+    public static float PanelTimeForShowing = 1.4f;
     
     /*
     {

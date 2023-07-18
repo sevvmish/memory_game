@@ -62,6 +62,15 @@ public class MainMenu : MonoBehaviour
     {
         StartCoroutine(fadeScreenOff());
 
+        if (Globals.IsSoundOn)
+        {
+            _audio.UnMute();
+        }
+        else
+        {
+            _audio.Mute();
+        }
+
         mainPlay.gameObject.SetActive(false);
         loading.gameObject.SetActive(true);
 
@@ -134,6 +143,13 @@ public class MainMenu : MonoBehaviour
             Globals.IsRepeteGame = false;
             playType1Game();
         });
+
+        playType2.onClick.AddListener(() =>
+        {
+            _audio.PlaySound_Click();
+            Globals.IsRepeteGame = false;
+            playType2Game();
+        });
     }
 
     private void TypeDescriptorsBack()
@@ -156,6 +172,20 @@ public class MainMenu : MonoBehaviour
 
         Globals.IsMobilePlatform = YandexGame.EnvironmentData.isMobile;
         print("platform mobile: " + Globals.IsMobilePlatform);
+
+        if (Globals.MainPlayerData.S == 1)
+        {
+            Globals.IsSoundOn = true;
+            _audio.UnMute();
+        }
+        else
+        {
+            Globals.IsSoundOn = false;
+            _audio.Mute();
+        }
+
+        print("sound is: "+ Globals.IsSoundOn);
+        
 
         if (Globals.TimeWhenStartedPlaying == DateTime.MinValue)
         {

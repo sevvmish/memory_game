@@ -23,6 +23,10 @@ public class ClickOnCurrentLevel : MonoBehaviour
                 case 1:
                     MainMenu.RepeteGame(LevelType, CurrentLevel);
                     break;
+
+                case 2:
+                    MainMenu.RepeteGame(LevelType, CurrentLevel);
+                    break;
             }
             
         });

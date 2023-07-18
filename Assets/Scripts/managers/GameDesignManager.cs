@@ -6,24 +6,140 @@ using UnityEngine.SceneManagement;
 public class GameDesignManager
 {
     public const int MAX_LVL_TYPE_1 = 50;
-    public const int MAX_LVL_TYPE_2 = 15;
-    /*
-    private Vector2 PanelsNumber;
-    private float PanelSimpleRotationSpeed;
-    private PairGroupTypes CurrentPairGroupType;
-    private float StageDurationInSec;
-    private float PanelTimeForShowing;
-    private int Difficulty;    
-    private int RewardedSeconds;
-    */
+    public const int MAX_LVL_TYPE_2 = 50;
+   
     private bool isNextLevelOK;
 
     private List<Conditions> conditionsForTypeOne = new List<Conditions>();
+    private List<Conditions> conditionsForTypeTwo = new List<Conditions>();
 
     public GameDesignManager() 
     {
         InitForType1();
+        InitForType2();
+    }
 
+    private void InitForType2()
+    {
+        int levelDuration = 0;
+        int rewardsSecs = 5;
+        float panelDuration = 1f;
+        int additionalPanels = 0;
+
+        for (int p = 0; p < 9; p++)
+        {
+            Vector2 cellsSpread = GetCellsSpreadByType((ThreePairCellsList)p);
+
+            for (int difficulty = 1; difficulty <= 5; difficulty++)
+            {
+                //additional panels==========
+                
+                if (p == 5 && difficulty == 4)
+                {
+                    additionalPanels = 3;
+                }
+                else if (p == 5 && difficulty == 5)
+                {
+                    additionalPanels = 6;
+                }
+                //===========================
+
+                //level duration and rewards=============
+                if (p == 0 && difficulty == 1)
+                {
+                    levelDuration = 30;
+                }
+                else
+                {
+                    switch ((ThreePairCellsList)p)
+                    {
+                        case ThreePairCellsList._3_2:
+                            levelDuration = 10;
+                            rewardsSecs = 4;
+                            panelDuration = 1.2f;
+                            break;
+
+                        case ThreePairCellsList._3_3:
+                            levelDuration = 13 + difficulty;
+                            rewardsSecs = 5;
+                            panelDuration = 1.2f;
+                            break;
+
+                        case ThreePairCellsList._4_3:
+                            levelDuration = 20 + difficulty;
+                            rewardsSecs = 8;
+                            panelDuration = 1.3f;
+                            break;
+
+                        case ThreePairCellsList._5_3:
+                            levelDuration = 35 + difficulty;
+                            rewardsSecs = 12;
+                            panelDuration = 1.3f;
+                            break;
+
+                        case ThreePairCellsList._6_3:
+                            levelDuration = 48 + difficulty*2;
+                            rewardsSecs = 17;
+                            panelDuration = 1.3f;
+                            break;
+
+                        case ThreePairCellsList._7_3:
+                            levelDuration = 70 + difficulty * 4;
+                            rewardsSecs = 30;
+                            panelDuration = 1.4f;
+                            break;
+
+                        case ThreePairCellsList._6_5:
+                            levelDuration = 100 + difficulty * 8;
+                            rewardsSecs = 50;
+                            panelDuration = 1.4f;
+                            break;
+
+                        case ThreePairCellsList._6_6:
+                            levelDuration = 130 + difficulty * 11;
+                            rewardsSecs = 70;
+                            panelDuration = 1.4f;
+                            break;
+
+                        case ThreePairCellsList._8_6:
+                            levelDuration = 185 + difficulty * 15;
+                            rewardsSecs = 80;
+                            panelDuration = 1.5f;
+                            break;
+                    }
+                }
+                //===========================
+                                
+                conditionsForTypeTwo.Add(new Conditions(cellsSpread, levelDuration, difficulty, PairGroupTypes.three, panelDuration, 0.3f, rewardsSecs, additionalPanels));
+
+                if (p == 5 && difficulty == 4)
+                {
+                    conditionsForTypeTwo.Add(new Conditions(cellsSpread, levelDuration, difficulty, PairGroupTypes.three, panelDuration, 0.3f, rewardsSecs, additionalPanels));
+                    conditionsForTypeTwo.Add(new Conditions(cellsSpread, levelDuration, difficulty, PairGroupTypes.three, panelDuration, 0.3f, rewardsSecs, additionalPanels));
+                }
+                else if (p == 5 && difficulty == 5)
+                {
+                    conditionsForTypeTwo.Add(new Conditions(cellsSpread, levelDuration, difficulty, PairGroupTypes.three, panelDuration, 0.3f, rewardsSecs, additionalPanels));
+                    conditionsForTypeTwo.Add(new Conditions(cellsSpread, levelDuration, difficulty, PairGroupTypes.three, panelDuration, 0.3f, rewardsSecs, additionalPanels));
+                }
+            }
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            conditionsForTypeTwo.Add(new Conditions(new Vector2(8, 6), 260, 5, PairGroupTypes.three, 1.5f, 0.3f, 80, 0));
+        }
+
+        /*
+        Debug.Log(conditionsForTypeTwo.Count + " !!!!!!!!!!!!!!!!!!!!!!");
+
+        
+        for (int i = 0; i < conditionsForTypeTwo.Count; i++)
+        {
+            Debug.Log(conditionsForTypeTwo[i].PanelsNumber + ": " + conditionsForTypeTwo[i].StageDurationInSec + "sec, diff: " + conditionsForTypeTwo[i].Difficulty + ", rew: " + conditionsForTypeTwo[i].RewardedSeconds);
+        }
+        Debug.Log("==============================================================================");
+        */
     }
 
     private void InitForType1()
@@ -172,9 +288,10 @@ public class GameDesignManager
             conditionsForTypeOne.Add(new Conditions(new Vector2(8, 6), 240, 5, PairGroupTypes.two, 1.3f, 0.3f, 60, 0));
         }
 
+        /*
         Debug.Log(conditionsForTypeOne.Count + " !!!!!!!!!!!!!!!!!!!!!!");
 
-        /*
+        
         for (int i = 0; i < conditionsForTypeOne.Count; i++)
         {
             Debug.Log(conditionsForTypeOne[i].PanelsNumber + ": " + conditionsForTypeOne[i].StageDurationInSec + "sec, diff: " + conditionsForTypeOne[i].Difficulty + ", rew: " + conditionsForTypeOne[i].RewardedSeconds);
@@ -187,15 +304,18 @@ public class GameDesignManager
         Globals.GameLevelRepete = _level;
         Globals.GameTypeRepete = _type;
 
-        switch (Globals.GameType)
+        switch (_type)
         {
             case 1:
+                //Debug.Log("type 11111111111111");
                 Conditions c = conditionsForTypeOne[_level];                
                 update(c);
                 break;
 
             case 2:
-                GameType_2_Logic();
+                //Debug.Log("type 22222222222222");
+                Conditions c1 = conditionsForTypeTwo[_level];
+                update(c1);
                 break;
         }
     }
@@ -240,7 +360,23 @@ public class GameDesignManager
 
     private void GameType_2_Logic()
     {
+        if (Globals.GameLevel < MAX_LVL_TYPE_2)
+        {
+            if (isNextLevelOK) Globals.GameLevel++;
+        }
 
+
+        Conditions c = new Conditions();
+        if (Globals.GameLevel < conditionsForTypeTwo.Count)
+        {
+            c = conditionsForTypeTwo[Globals.GameLevel];
+        }
+        else
+        {
+            c = conditionsForTypeTwo[conditionsForTypeTwo.Count - 1];
+        }
+
+        update(c);
     }
 
     private void update(Conditions c)
@@ -292,6 +428,42 @@ public class GameDesignManager
 
         return Vector2.zero;
     }
+
+    public static Vector2 GetCellsSpreadByType(ThreePairCellsList p)
+    {
+        switch (p)
+        {
+            case ThreePairCellsList._3_2:
+                return new Vector2(3, 2);
+
+            case ThreePairCellsList._3_3:
+                return new Vector2(3, 3);
+
+            case ThreePairCellsList._4_3:
+                return new Vector2(4, 3);
+
+            case ThreePairCellsList._5_3:
+                return new Vector2(5, 3);
+
+            case ThreePairCellsList._6_3:
+                return new Vector2(6, 3);
+
+            case ThreePairCellsList._7_3:
+                return new Vector2(7, 3);
+
+            case ThreePairCellsList._6_5:
+                return new Vector2(6, 5);
+
+            case ThreePairCellsList._6_6:
+                return new Vector2(6, 6);
+
+            case ThreePairCellsList._8_6:
+                return new Vector2(8, 6);
+                            
+        }
+
+        return Vector2.zero;
+    }
 }
 
 public enum PairGroupTypes
@@ -309,6 +481,19 @@ public enum TwoPairCellsList
     _6_4,
     _6_5,
     _8_5,
+    _8_6
+}
+
+public enum ThreePairCellsList
+{
+    _3_2,
+    _3_3,
+    _4_3,
+    _5_3,
+    _6_3,
+    _7_3,
+    _6_5,
+    _6_6,
     _8_6
 }
 
@@ -349,6 +534,7 @@ public struct Conditions
 //max = 8/6
 
 //THREE
+// 3/2
 // 3/3 - 3 uniques
 // 4/3 - 4 uniques
 // 5/3 - 5 uniques

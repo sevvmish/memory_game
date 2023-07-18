@@ -11,6 +11,7 @@ public class PlayerData
     public int LGT;
     public string L;
     public int M;
+    public int S;
 
     public PlayerData()
     {
@@ -19,6 +20,7 @@ public class PlayerData
         LGT = 0; //last played game type
         L = ""; //prefered language
         M = 1; //mobile platform? 1 - true;
+        S = 1; // sound on? 1 - true;
         Debug.Log("created PlayerData instance");
     }
 

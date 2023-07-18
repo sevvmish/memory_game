@@ -4534,19 +4534,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1978306903988258671, guid: 70baad3d78021f14f96ecf63fefa77de, type: 3}
       propertyPath: m_Spacing.x
-      value: 12
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1978306903988258671, guid: 70baad3d78021f14f96ecf63fefa77de, type: 3}
       propertyPath: m_Spacing.y
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1978306903988258671, guid: 70baad3d78021f14f96ecf63fefa77de, type: 3}
       propertyPath: m_CellSize.x
-      value: 120
+      value: 68
       objectReference: {fileID: 0}
     - target: {fileID: 1978306903988258671, guid: 70baad3d78021f14f96ecf63fefa77de, type: 3}
       propertyPath: m_CellSize.y
-      value: 120
+      value: 66
       objectReference: {fileID: 0}
     - target: {fileID: 2017105089542845379, guid: 70baad3d78021f14f96ecf63fefa77de, type: 3}
       propertyPath: m_IsActive

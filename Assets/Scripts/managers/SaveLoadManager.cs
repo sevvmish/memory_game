@@ -10,7 +10,7 @@ public class SaveLoadManager
     //[DllImport("__Internal")]
     //private static extern void LoadExtern();
 
-    private const string ID = "Playerdata18";
+    private const string ID = "Playerdata20";
 
     public static void Save()
     {
@@ -29,6 +29,7 @@ public class SaveLoadManager
 
         Globals.MainPlayerData.L = Globals.CurrentLanguage;
         Globals.MainPlayerData.M = Globals.IsMobilePlatform ? 1 : 0;
+        Globals.MainPlayerData.S = Globals.IsSoundOn ? 1 : 0;
 
         string data = JsonUtility.ToJson(Globals.MainPlayerData);
         Debug.Log("saved: " + data);
