@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceab8fa81e09cd649aeccbaa82762d7a, type: 3}
+  m_Name: 15 medium 1
+  m_EditorClassIdentifier: 
+  ID: 15
+  PackName: medium small 1 more mush
+  PackDifficulty: 3
+  sprites:
+  - {fileID: 21300000, guid: 0e1eec03cc782514da7bd81e9174f54c, type: 3}
+  - {fileID: 21300000, guid: 60f65e5935054ab4faf241ae930987b5, type: 3}
+  - {fileID: 21300000, guid: b6fd326bc7b59254691731a7d75e3998, type: 3}
+  - {fileID: 21300000, guid: dde1d68e9a2a29f4fb8e2a72a362bcd0, type: 3}
+  - {fileID: 21300000, guid: f27e04703ea243042ab31dda69b63e84, type: 3}
+  - {fileID: 21300000, guid: dc035cb5f75664291ad6fee01bf08790, type: 3}
+  - {fileID: 21300000, guid: 76e54cc89c69d4cc0aacf00ba224b504, type: 3}
+  - {fileID: 21300000, guid: 40e31d07a352f45ff81070def3421c8d, type: 3}
+  - {fileID: 21300000, guid: 7597de3a70e2c4151875c5fb816cf0e5, type: 3}
+  - {fileID: 21300000, guid: 3e87be51823d846949ed08c33c74b463, type: 3}

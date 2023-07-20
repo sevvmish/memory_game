@@ -41,6 +41,7 @@ public class MainMenu : MonoBehaviour
 
     [Header("panels tranlation")]
     [SerializeField] private TextMeshProUGUI playButtonText;
+    [SerializeField] private TextMeshProUGUI loadingSignText;
 
     [SerializeField] private TextMeshProUGUI type1Name;
     [SerializeField] private TextMeshProUGUI type2Name;
@@ -187,7 +188,7 @@ public class MainMenu : MonoBehaviour
             Globals.TimeWhenLastRewardedWas = DateTime.Now;
         }
 
-        Globals.CurrentLanguage = Globals.MainPlayerData.L;
+        //Globals.CurrentLanguage = Globals.MainPlayerData.L;
         
 
         Globals.GameDesignManager = new GameDesignManager();
@@ -238,6 +239,7 @@ public class MainMenu : MonoBehaviour
         lang = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
 
         playButtonText.text = lang.playText;
+        loadingSignText.text = lang.loadingText;
 
         type1Name.text = lang.Type1Name;
         type2Name.text = lang.Type2Name;
@@ -251,10 +253,10 @@ public class MainMenu : MonoBehaviour
         
         //print("type: " + Globals.GameType + ", level: " + Globals.GameLevel);
 
-        for (int i = 0; i < Globals.MainPlayerData.GT1P.Length; i++)
+        for (int i = 0; i < Globals.MainPlayerData.GT1Pn.Length; i++)
         {
             
-            if (Globals.MainPlayerData.GT1P[i] == 1 || (i == 0 && Globals.MainPlayerData.GT1P[i] == 0))
+            if (Globals.MainPlayerData.GT1Pn[i] == 1 || (i == 0 && Globals.MainPlayerData.GT1Pn[i] == 0))
             {
                 GameObject c = Instantiate(cellWithNumber, placeForLevelCellsForType1);
                 c.SetActive(true);
@@ -272,10 +274,10 @@ public class MainMenu : MonoBehaviour
 
     private void panel2_Descriptor()
     {
-        for (int i = 0; i < Globals.MainPlayerData.GT2P.Length; i++)
+        for (int i = 0; i < Globals.MainPlayerData.GT2Pn.Length; i++)
         {
 
-            if (Globals.MainPlayerData.GT2P[i] == 1 || (i == 0 && Globals.MainPlayerData.GT2P[i] == 0))
+            if (Globals.MainPlayerData.GT2Pn[i] == 1 || (i == 0 && Globals.MainPlayerData.GT2Pn[i] == 0))
             {
                 GameObject c = Instantiate(cellWithNumber, placeForLevelCellsForType2);
                 c.SetActive(true);
@@ -294,14 +296,14 @@ public class MainMenu : MonoBehaviour
     private void playType1Game()
     {
         Globals.GameType = 1;
-        Globals.GameLevel = Globals.MainPlayerData.GT1P.Sum();
+        Globals.GameLevel = Globals.MainPlayerData.GT1Pn.Sum();
         Globals.GameDesignManager.SetLevelData(false);
     }
 
     private void playType2Game()
     {
         Globals.GameType = 2;
-        Globals.GameLevel = Globals.MainPlayerData.GT2P.Sum();
+        Globals.GameLevel = Globals.MainPlayerData.GT2Pn.Sum();
         Globals.GameDesignManager.SetLevelData(false);
     }
 

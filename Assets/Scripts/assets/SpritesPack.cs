@@ -14,7 +14,7 @@ public class SpritesPack : MonoBehaviour
 
     public Pack[] packs;
 
-    public Sprite[] GetRandomPack(int limit)
+    public Sprite[] GetRandomPack(int Amount, int Diff)
     {
         if (packs.Length == 0)
         {
@@ -22,6 +22,25 @@ public class SpritesPack : MonoBehaviour
         }
         else
         {
+            List<Pack> smalls = new List<Pack>();
+            List<Pack> bigs = new List<Pack>();
+
+            for (int i = 0; i < packs.Length; i++)
+            {
+                if (packs[i].sprites.Length <= 10)
+                {
+                    smalls.Add(packs[i]);
+                }
+                else
+                {
+                    bigs.Add(packs[i]);
+                }
+            }
+
+
+          
+
+
             int value = 0;
             int packID = -1;
 

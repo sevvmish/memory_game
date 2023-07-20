@@ -197,6 +197,7 @@ MonoBehaviour:
   restart: {fileID: 1407536776}
   soundONSprite: {fileID: 21300000, guid: efe5ec8cdf7c96d47ac02187a63c226b, type: 3}
   soundOffSprite: {fileID: 21300000, guid: 3f91317d1a2d9b940be29dc0284485af, type: 3}
+  nextButtonText: {fileID: 1257181082}
   hint1: {fileID: 1799912502}
   hint1Text: {fileID: 1720453776}
   hint2: {fileID: 1728503853}
@@ -634,7 +635,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &209542671
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2065,6 +2066,10 @@ PrefabInstance:
     - target: {fileID: 1509956189633720, guid: 1177133a709aac84289a7d57c5ea92c3, type: 3}
       propertyPath: m_Name
       value: BasicCounter
+      objectReference: {fileID: 0}
+    - target: {fileID: 1509956189633720, guid: 1177133a709aac84289a7d57c5ea92c3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114756645675373138, guid: 1177133a709aac84289a7d57c5ea92c3, type: 3}
       propertyPath: m_Color.b
@@ -5737,7 +5742,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2100197946
 RectTransform:
   m_ObjectHideFlags: 0

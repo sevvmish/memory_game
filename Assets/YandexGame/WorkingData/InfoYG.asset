@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scopes: 1
   playerPhotoSize: 0
-  leaderboardEnable: 0
+  leaderboardEnable: 1
   saveCloud: 1
-  flush: 0
+  flush: 1
   localSaveSync: 1
   saveCloudInterval: 1
   metricaEnable: 0
@@ -119,7 +119,7 @@ MonoBehaviour:
     de: 
     hi: 
   debug: 1
-  archivingBuild: 1
+  archivingBuild: 0
   bakcgroundImage: 2
   pixelRatioEnable: 0
   pixelRatioValue: 1

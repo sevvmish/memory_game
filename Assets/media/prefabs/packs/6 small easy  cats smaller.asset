@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceab8fa81e09cd649aeccbaa82762d7a, type: 3}
+  m_Name: 6 small easy  cats smaller
+  m_EditorClassIdentifier: 
+  ID: 6
+  PackName: small cats easy pack
+  PackDifficulty: 2
+  sprites:
+  - {fileID: 21300000, guid: b69c87bfc13d65a4fa8c8fb0286ca191, type: 3}
+  - {fileID: 21300000, guid: 7a0adc77adcb1c84e841b833ed093ebd, type: 3}
+  - {fileID: 21300000, guid: f27e04703ea243042ab31dda69b63e84, type: 3}
+  - {fileID: 21300000, guid: ec46c47b45341f34f948a19f76a386b9, type: 3}
+  - {fileID: 21300000, guid: 9c45669ddab1a10419ffa4c5c361fdaf, type: 3}
+  - {fileID: 21300000, guid: 685010c0a260e834aab2313e2933b551, type: 3}
+  - {fileID: 21300000, guid: c89ae05c1683edd42a7c0c7d8be3a2eb, type: 3}
+  - {fileID: 21300000, guid: 1dc8c623004634d4da81f684d44bef8b, type: 3}
+  - {fileID: 21300000, guid: 620b0c9489bbacd44bfeaa98c9bbbc24, type: 3}
+  - {fileID: 21300000, guid: b6fd326bc7b59254691731a7d75e3998, type: 3}

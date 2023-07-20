@@ -23,8 +23,8 @@ public class Globals : MonoBehaviour
 
     public static DateTime TimeWhenStartedPlaying;
 
-    public const float INTERVAL_FOR_INTERSTITITAL = 90;
-    public const float INTERVAL_FOR_REWARDED = 90;
+    public const float INTERVAL_FOR_INTERSTITITAL = 65;
+    public const float INTERVAL_FOR_REWARDED = 65;
     public static DateTime TimeWhenLastInterstitialWas;
     public static int InterstitialsAmount;
     public static DateTime TimeWhenLastRewardedWas;

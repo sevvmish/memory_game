@@ -10,7 +10,11 @@ public class Localization
         switch(lang)
         {
             case "ru":
-                translation = Resources.Load<Translation>("languages/russian");
+                translation = Resources.Load<Translation>("languages/russian");                
+                break;
+
+            case "en":
+                translation = Resources.Load<Translation>("languages/english");
                 break;
 
             default:

@@ -49,8 +49,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button restart;
     [SerializeField] private Sprite soundONSprite;
     [SerializeField] private Sprite soundOffSprite;
+    [SerializeField] private TextMeshProUGUI nextButtonText;
 
-    [Header("MENU")]
+    [Header("TUTORIAL")]
     [SerializeField] private GameObject hint1;
     [SerializeField] private TextMeshProUGUI hint1Text;
     [SerializeField] private GameObject hint2;
@@ -71,6 +72,9 @@ public class GameManager : MonoBehaviour
     private bool isRestaring;
     private bool isTouchActive;
     private bool isGameStarted;
+    private bool isRewardedStarted;
+    private bool isRewardedOK;
+    private bool isRewardedUsed;
 
     private int pairAmount;
     private int overallPanels
@@ -118,7 +122,10 @@ public class GameManager : MonoBehaviour
         hint1Text.text = lang.hint1;
         hint2.SetActive(false);
         hint2Text.text = lang.hint2;
-                
+
+        nextButtonText.text = lang.next;
+
+
         winLosePanel.SetActive(false);
         winPartPanel.SetActive(false);
         losePartPanelNoReward.SetActive(false);
@@ -143,7 +150,7 @@ public class GameManager : MonoBehaviour
         int count = Panel.CreatePanels((int)Globals.PanelsNumber.x, (int)Globals.PanelsNumber.y, 
             basicPanel, PanelsLocation, ref panels, Globals.AdditionalPanelsAmount);        
                 
-        Panel.ArrangePanels(spritesPack.GetRandomPack((int)(count/pairAmount)), count, pairAmount, ref panels);
+        Panel.ArrangePanels(spritesPack.GetRandomPack((int)(count/pairAmount), Globals.Difficulty), count, pairAmount, ref panels);
         backGround.sprite = spritesPack.GetRandomBackGround();
 
         timerSliderImage.fillAmount = 1f;
@@ -287,7 +294,27 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        
+        if (isRewardedStarted)
+        {
+            if (isRewardedOK)
+            {
+                isRewardedStarted = false;
+                isRewardedOK = false;
+                isRewardedUsed = true;
+                givePrizeForReward();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            gameWin();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            gameLose();
+        }
+
         if (!isGameStarted) return;
 
         if (currentTimer <= 0)
@@ -449,7 +476,7 @@ public class GameManager : MonoBehaviour
 
         print(DateTime.Now.Subtract(Globals.TimeWhenLastRewardedWas).TotalSeconds + " till starting rewarded");
 
-        if (DateTime.Now.Subtract(Globals.TimeWhenLastRewardedWas).TotalSeconds > Globals.INTERVAL_FOR_REWARDED)
+        if (DateTime.Now.Subtract(Globals.TimeWhenLastRewardedWas).TotalSeconds > Globals.INTERVAL_FOR_REWARDED && !isRewardedUsed)
         {            
             losePartPanelReward.SetActive(true);
             losePartPanelNoReward.SetActive(false);
@@ -482,10 +509,11 @@ public class GameManager : MonoBehaviour
             Globals.TimeWhenLastRewardedWas = DateTime.Now;
             Globals.TimeWhenLastInterstitialWas = DateTime.Now;
             Globals.RewardedAmount++;
-            YandexGame.OpenVideoEvent = advStarted;
+            YandexGame.OpenVideoEvent = rewardStarted;
+            YandexGame.RewardVideoEvent = rewardedClosedOK;
             YandexGame.CloseVideoEvent = advRewardedClosed;//nextLevelAction;
             YandexGame.ErrorVideoEvent = advRewardedError;//nextLevelAction;
-            YandexGame.RewVideoShow(0);
+            YandexGame.RewVideoShow(155);
         }
         else
         {
@@ -534,10 +562,25 @@ public class GameManager : MonoBehaviour
         print("adv was OK");        
     }
 
+    private void rewardStarted()
+    {
+        print("reward was OK");
+        isRewardedStarted = true;
+    }
+
     private void advClosed()
     {
         print("adv was closed");
         nextLevelAction?.Invoke();
+    }
+
+    private void rewardedClosedOK(int value)
+    {
+        //155
+        if (value == 155)
+        {
+            isRewardedOK = true;
+        }
     }
 
     private void advRewardedClosed()
@@ -545,8 +588,13 @@ public class GameManager : MonoBehaviour
         print("rewarded was OK-closed");
         //
         //PanelsLocation.gameObject.SetActive(true);
+        
+    }
+
+    private void givePrizeForReward()
+    {
         showPanel();
-        currentTimer += Globals.RewardedSeconds;
+        currentTimer = Globals.RewardedSeconds;
         isGameStarted = true;
         isRestaring = false;
         winLosePanel.SetActive(false);

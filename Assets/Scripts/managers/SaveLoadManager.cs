@@ -10,19 +10,19 @@ public class SaveLoadManager
     //[DllImport("__Internal")]
     //private static extern void LoadExtern();
 
-    private const string ID = "Playerdata24";
+    private const string ID = "Playerdata27";
 
     public static void Save()
     {
         switch(Globals.GameType)
         {
             case 1:
-                Globals.MainPlayerData.GT1P[Globals.GameLevel] = 1;
+                Globals.MainPlayerData.GT1Pn[Globals.GameLevel] = 1;
                 Globals.MainPlayerData.LGT = 1;
                 break;
 
             case 2:
-                Globals.MainPlayerData.GT2P[Globals.GameLevel] = 1;
+                Globals.MainPlayerData.GT2Pn[Globals.GameLevel] = 1;
                 Globals.MainPlayerData.LGT = 2;
                 break;
         }
@@ -35,10 +35,12 @@ public class SaveLoadManager
         Debug.Log("saved: " + data);
         PlayerPrefs.SetString(ID, data);
 
+        YandexGame.savesData.PlayerMainData1 = data;
+
         try
         {
-            YandexGame.savesData.PlayerMainData = data;
-            YandexGame.SaveCloud();
+            //YandexGame.SaveCloud();
+            YandexGame.SaveProgress();
         }
         catch (System.Exception ex)
         {
@@ -50,23 +52,27 @@ public class SaveLoadManager
     public static void Load()
     {
         string fromSave = "";
+        YandexGame.LoadProgress();
 
         try
         {
-            YandexGame.LoadCloud();
-            fromSave = YandexGame.savesData.PlayerMainData;
+            //YandexGame.LoadCloud();
+            //YandexGame.LoadProgress();
+            fromSave = YandexGame.savesData.PlayerMainData1;
             Debug.Log("что получено из сейва облака: " + fromSave);
         }
         catch (System.Exception ex)
         {
             Debug.LogError(ex);
             Debug.LogError("error loading data, defaults loaded");
-            fromSave = PlayerPrefs.GetString(ID);
+            
         }
             
             
         if (!string.IsNullOrEmpty(fromSave))
         {
+            
+
             Debug.Log("loaded: " + fromSave);
             try
             {
@@ -75,17 +81,21 @@ public class SaveLoadManager
             catch (System.Exception)
             {
                 Globals.MainPlayerData = new PlayerData();
-                //Globals.MainPlayerData.LGT = 1;
-                //Globals.MainPlayerData.GT1P[0] = 1;
-                //Globals.MainPlayerData.GT1P[1] = 1;
-                //Globals.MainPlayerData.GT1P[2] = 1;
-                //Globals.MainPlayerData.GT1P[3] = 1;
             }
                         
         }
         else
         {
-            Globals.MainPlayerData = new PlayerData();
+            fromSave = PlayerPrefs.GetString(ID);
+
+            if (string.IsNullOrEmpty(fromSave))
+            {
+                Globals.MainPlayerData = new PlayerData();
+            }
+            else
+            {
+                Globals.MainPlayerData = JsonUtility.FromJson<PlayerData>(fromSave);
+            }                
         }       
     }
 

@@ -7,6 +7,8 @@ public class Translation : ScriptableObject
 {
     //HEROES==============================================
     public string playText;
+    public string loadingText;
+    public string next;
 
     [Header("Types")]
     public string Type1Name;
