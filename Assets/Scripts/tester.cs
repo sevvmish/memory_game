@@ -12,6 +12,13 @@ public class tester : MonoBehaviour
         {
             for (int j = 0; j < p.packs[i].sprites.Length; j++)
             {
+                if (p.packs[i].sprites[j] == null)
+                {
+                    print("null sprite in: " + p.packs[i].PackName + ", ID: " + p.packs[i].ID);
+                    continue;
+                }
+
+
                 for (int g = 0; g < p.packs[i].sprites.Length; g++)
                 {
                     if (j==g)

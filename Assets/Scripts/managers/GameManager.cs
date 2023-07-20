@@ -75,6 +75,7 @@ public class GameManager : MonoBehaviour
     private bool isRewardedStarted;
     private bool isRewardedOK;
     private bool isRewardedUsed;
+    private bool isLastOpenerWorked;
 
     private int pairAmount;
     private int overallPanels
@@ -106,6 +107,14 @@ public class GameManager : MonoBehaviour
     {
         //Screen.SetResolution(1200, 600, true);
         //SaveLoadManager.Load();
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
 
         if (Globals.IsMobilePlatform)
         {
@@ -116,6 +125,8 @@ public class GameManager : MonoBehaviour
             if (Globals.PanelsNumber.x < 8) mainCamera.fieldOfView = 70;
         }
 
+
+
         lang = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
 
         hint1.SetActive(false);
@@ -124,7 +135,6 @@ public class GameManager : MonoBehaviour
         hint2Text.text = lang.hint2;
 
         nextButtonText.text = lang.next;
-
 
         winLosePanel.SetActive(false);
         winPartPanel.SetActive(false);
@@ -136,23 +146,31 @@ public class GameManager : MonoBehaviour
         secondsAmountText.text = Globals.RewardedSeconds.ToString() + " " + lang.secondsAmountPart;
         forRewardText.text = lang.forRewarded;
 
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
-                        
         pairAmount = (int)Globals.CurrentPairGroupType;
-                
-        int count = Panel.CreatePanels((int)Globals.PanelsNumber.x, (int)Globals.PanelsNumber.y, 
-            basicPanel, PanelsLocation, ref panels, Globals.AdditionalPanelsAmount);        
-                
-        Panel.ArrangePanels(spritesPack.GetRandomPack((int)(count/pairAmount), Globals.Difficulty), count, pairAmount, ref panels);
-        backGround.sprite = spritesPack.GetRandomBackGround();
 
+        try
+        {
+            int count = Panel.CreatePanels((int)Globals.PanelsNumber.x, (int)Globals.PanelsNumber.y,
+            basicPanel, PanelsLocation, ref panels, Globals.AdditionalPanelsAmount);
+
+            Panel.ArrangePanels(spritesPack.GetRandomPack((int)(count / pairAmount), Globals.Difficulty), count, pairAmount, ref panels);
+            backGround.sprite = spritesPack.GetRandomBackGround();
+        }
+        catch (Exception ex)
+        {
+            print(ex);
+
+            if (!Globals.IsRepeteGame)
+            {
+                SceneManager.LoadScene("Gameplay");
+            }
+            else
+            {
+                Globals.GameDesignManager.SetLevelData(Globals.GameTypeRepete, Globals.GameLevelRepete);
+            }
+        }
+
+        
         timerSliderImage.fillAmount = 1f;
         timerText.text = "";
         currentTimer = Globals.StageDurationInSec;
@@ -408,6 +426,12 @@ public class GameManager : MonoBehaviour
         {
             gameWin();
         }
+        //PREWIN
+        if ((overallPanels - collectedPanels) == pairAmount && !isLastOpenerWorked && Globals.PanelsNumber.x > 4 && pairAmount > 2)
+        {
+            openLastPanels();
+        }
+
 
 
         if (Input.GetMouseButton(0) && isTouchActive)
@@ -431,9 +455,49 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void openLastPanels()
+    {
+        isLastOpenerWorked = true;
+        StartCoroutine(playLastPanels());
+    }
+    private IEnumerator playLastPanels()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+
+        groupsToCompare.Clear();
+
+        List<Panel> toShow = new List<Panel>();    
+
+        for (int i = 0; i < panels.Count; i++)
+        {
+            if (!panels[i].IsCompleted)
+            {
+                //panels[i].TryShowFace();
+                groupsToCompare.Add(panels[i]);
+                toShow.Add(panels[i]);                
+            }
+        }
+
+        for (int i = 0; i < toShow.Count; i++)
+        {
+            toShow[i].TryShowFace();
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
+
+
     private void gameWin()
     {
+        StartCoroutine(playGameWin());
+    }
+    private IEnumerator playGameWin()
+    {
+        isGameStarted = false;
         _audio.PlaySound_WinGame();
+
+        yield return new WaitForSeconds(1f);
+                
         confeti.SetActive(true);
         timerPanel.SetActive(false);
         //PanelsLocation.gameObject.SetActive(false);
@@ -442,14 +506,14 @@ public class GameManager : MonoBehaviour
         winPartPanel.SetActive(true);
         winLoseMessages.text = lang.winText;
 
-        isGameStarted = false;
+        
         nextLevelAction = toNextLevel;
         if (!Globals.IsRepeteGame) SaveLoadManager.Save();
         isRestaring = true;
 
         Debug.LogWarning("GAME WIN");
-
     }
+
 
     private void hidePanel()
     {
@@ -564,6 +628,10 @@ public class GameManager : MonoBehaviour
 
     private void rewardStarted()
     {
+        losePartPanelReward.SetActive(false);
+        losePartPanelNoReward.SetActive(true);
+
+
         print("reward was OK");
         isRewardedStarted = true;
     }

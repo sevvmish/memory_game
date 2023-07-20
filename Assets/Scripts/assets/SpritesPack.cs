@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,36 +23,23 @@ public class SpritesPack : MonoBehaviour
         }
         else
         {
-            List<Pack> smalls = new List<Pack>();
-            List<Pack> bigs = new List<Pack>();
+            List<Pack> candidates = new List<Pack>();
 
             for (int i = 0; i < packs.Length; i++)
             {
-                if (packs[i].sprites.Length <= 10)
-                {
-                    smalls.Add(packs[i]);
-                }
-                else
-                {
-                    bigs.Add(packs[i]);
-                }
+                if (packs[i].ID == Globals.PreviousPackIDNumber) continue;
+                if (packs[i].sprites.Length < Amount) continue;
+                if (MathF.Abs(packs[i].PackDifficulty - Diff) > 1) continue;
+
+                candidates.Add(packs[i]);
             }
 
+            int value = UnityEngine.Random.Range(0, candidates.Count);
+            Pack pack = candidates[value];
+            Globals.PreviousPackIDNumber = pack.ID;
 
-          
-
-
-            int value = 0;
-            int packID = -1;
-
-            for (int i = 0; i < 100; i++)
-            {
-                value = UnityEngine.Random.Range(0, packs.Length);
-                packID = packs[value].ID;
-                if (Globals.PreviousPackIDNumber != packID) break;
-            }
-            Globals.PreviousPackIDNumber = packID;
-            return packs[value].sprites;
+            print("used pack with ID: " + pack.ID);
+            return pack.sprites;
         }
     }
 
