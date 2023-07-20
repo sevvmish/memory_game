@@ -32,7 +32,7 @@ public class SaveLoadManager
         Globals.MainPlayerData.S = Globals.IsSoundOn ? 1 : 0;
 
         string data = JsonUtility.ToJson(Globals.MainPlayerData);
-        Debug.Log("saved: " + data);
+        //Debug.Log("saved: " + data);
         PlayerPrefs.SetString(ID, data);
 
         YandexGame.savesData.PlayerMainData1 = data;
@@ -59,7 +59,7 @@ public class SaveLoadManager
             //YandexGame.LoadCloud();
             //YandexGame.LoadProgress();
             fromSave = YandexGame.savesData.PlayerMainData1;
-            Debug.Log("что получено из сейва облака: " + fromSave);
+            //Debug.Log("что получено из сейва облака: " + fromSave);
         }
         catch (System.Exception ex)
         {

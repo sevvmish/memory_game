@@ -38,7 +38,7 @@ public class SpritesPack : MonoBehaviour
             Pack pack = candidates[value];
             Globals.PreviousPackIDNumber = pack.ID;
 
-            print("used pack with ID: " + pack.ID);
+            print("used pack with ID: " + pack.ID + ", difficulty: " + Diff);
             return pack.sprites;
         }
     }

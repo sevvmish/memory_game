@@ -206,6 +206,14 @@ public class MainMenu : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            YandexGame.ResetSaveProgress();
+            Globals.MainPlayerData = new PlayerData();
+            SaveLoadManager.Save();
+            SaveLoadManager.Load();
+        }
+
         if (!Globals.IsInitiated)
         {
             if (!isTryGetData)

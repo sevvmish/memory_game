@@ -5,9 +5,9 @@ public class Globals : MonoBehaviour
 {
     public static GameDesignManager GameDesignManager;
     public static PlayerData MainPlayerData;
-    public static int GameType = 1;// = 1;
-    public static int GameLevel = 1;// = 0;
-    public static int Difficulty = 1;// = 0;
+    public static int GameType;// = 1;
+    public static int GameLevel;// = 0;
+    public static int Difficulty;// = 0;
     public static int RewardedSeconds = 20;// = 10;
     public static int AdditionalPanelsAmount = 0;
 
@@ -20,6 +20,8 @@ public class Globals : MonoBehaviour
     public static bool IsRepeteGame;
     public static int GameTypeRepete = 1;// = 1;
     public static int GameLevelRepete = 3;// = 0;
+
+    public static int HowManyLost = 0;
 
     public static DateTime TimeWhenStartedPlaying;
 

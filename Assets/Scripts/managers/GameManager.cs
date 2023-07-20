@@ -173,7 +173,18 @@ public class GameManager : MonoBehaviour
         
         timerSliderImage.fillAmount = 1f;
         timerText.text = "";
-        currentTimer = Globals.StageDurationInSec;
+
+        if (Globals.HowManyLost > 2)
+        {
+            Globals.HowManyLost = 0;
+            currentTimer = Globals.StageDurationInSec * 1.2f;
+        }
+        else
+        {
+            currentTimer = Globals.StageDurationInSec;
+        }
+        
+        
         timerPanel.SetActive(true);
 
         menuPanel.SetActive(false);
@@ -325,12 +336,12 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            gameWin();
+            //gameWin();
         }
 
         if (Input.GetKeyDown(KeyCode.L))
         {
-            gameLose();
+            //gameLose();
         }
 
         if (!isGameStarted) return;
@@ -489,6 +500,7 @@ public class GameManager : MonoBehaviour
 
     private void gameWin()
     {
+        if (Globals.HowManyLost>0) Globals.HowManyLost--;
         StartCoroutine(playGameWin());
     }
     private IEnumerator playGameWin()
@@ -527,6 +539,7 @@ public class GameManager : MonoBehaviour
 
     private void gameLose()
     {
+        Globals.HowManyLost++;
         _audio.PlaySound_LoseGame();
         //PanelsLocation.gameObject.SetActive(false);
         hidePanel();
@@ -679,6 +692,7 @@ public class GameManager : MonoBehaviour
         }
         OneByOnePanelOpened = 0;
         groupsToCompare.Clear();
+        _audio.PlaySound_Success();
     }
 
     private void advError()

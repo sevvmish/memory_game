@@ -60,49 +60,49 @@ public class GameDesignManager
                             break;
 
                         case ThreePairCellsList._3_3:
-                            levelDuration = 15 + difficulty;
+                            levelDuration = 18 + difficulty;
                             rewardsSecs = 5;
                             panelDuration = 1.2f;
                             break;
 
                         case ThreePairCellsList._4_3:
-                            levelDuration = 20 + difficulty;
+                            levelDuration = 23 + difficulty;
                             rewardsSecs = 8;
                             panelDuration = 1.3f;
                             break;
 
                         case ThreePairCellsList._5_3:
-                            levelDuration = 35 + difficulty;
+                            levelDuration = 30 + difficulty;
                             rewardsSecs = 12;
                             panelDuration = 1.3f;
                             break;
 
                         case ThreePairCellsList._6_3:
-                            levelDuration = 48 + difficulty*2;
+                            levelDuration = 40 + difficulty*2;
                             rewardsSecs = 17;
                             panelDuration = 1.3f;
                             break;
 
                         case ThreePairCellsList._7_3:
-                            levelDuration = 70 + difficulty * 4;
+                            levelDuration = 80 + difficulty * 4;
                             rewardsSecs = 30;
                             panelDuration = 1.4f;
                             break;
 
                         case ThreePairCellsList._6_5:
-                            levelDuration = 100 + difficulty * 8;
+                            levelDuration = 120 + difficulty * 8;
                             rewardsSecs = 50;
                             panelDuration = 1.4f;
                             break;
 
                         case ThreePairCellsList._6_6:
-                            levelDuration = 130 + difficulty * 11;
+                            levelDuration = 150 + difficulty * 11;
                             rewardsSecs = 70;
                             panelDuration = 1.4f;
                             break;
 
                         case ThreePairCellsList._8_6:
-                            levelDuration = 185 + difficulty * 15;
+                            levelDuration = 200 + difficulty * 15;
                             rewardsSecs = 80;
                             panelDuration = 1.5f;
                             break;
@@ -213,12 +213,12 @@ public class GameDesignManager
                             break;
 
                         case TwoPairCellsList._4_2:
-                            levelDuration = 20 + difficulty + additionalPanels;
+                            levelDuration = 15 + difficulty + additionalPanels;
                             rewardsSecs = 10;
                             break;
 
                         case TwoPairCellsList._4_3:
-                            levelDuration = 30 + difficulty + additionalPanels * 2;
+                            levelDuration = 25 + difficulty + additionalPanels * 2;
                             rewardsSecs = 15;
                             break;
 
