@@ -313,7 +313,7 @@ public class GameManager : MonoBehaviour
         {
             _audio.Mute();
         }
-
+        
         if (Globals.MainPlayerData.H1 == 0 && Globals.GameLevel == 0)
         {
             StartCoroutine(showHints());

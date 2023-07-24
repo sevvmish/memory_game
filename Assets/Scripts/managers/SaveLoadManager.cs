@@ -10,19 +10,19 @@ public class SaveLoadManager
     //[DllImport("__Internal")]
     //private static extern void LoadExtern();
 
-    private const string ID = "Playerdata27";
+    private const string ID = "Playerdata28";
 
     public static void Save()
     {
         switch(Globals.GameType)
         {
             case 1:
-                Globals.MainPlayerData.GT1Pn[Globals.GameLevel] = 1;
+                Globals.MainPlayerData.GT1Pn2[Globals.GameLevel] = 1;
                 Globals.MainPlayerData.LGT = 1;
                 break;
 
             case 2:
-                Globals.MainPlayerData.GT2Pn[Globals.GameLevel] = 1;
+                Globals.MainPlayerData.GT2Pn2[Globals.GameLevel] = 1;
                 Globals.MainPlayerData.LGT = 2;
                 break;
         }
@@ -35,7 +35,7 @@ public class SaveLoadManager
         //Debug.Log("saved: " + data);
         PlayerPrefs.SetString(ID, data);
 
-        YandexGame.savesData.PlayerMainData1 = data;
+        YandexGame.savesData.PlayerMainData2 = data;
 
         try
         {
@@ -58,7 +58,7 @@ public class SaveLoadManager
         {
             //YandexGame.LoadCloud();
             //YandexGame.LoadProgress();
-            fromSave = YandexGame.savesData.PlayerMainData1;
+            fromSave = YandexGame.savesData.PlayerMainData2;
             //Debug.Log("что получено из сейва облака: " + fromSave);
         }
         catch (System.Exception ex)

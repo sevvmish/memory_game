@@ -42,6 +42,10 @@ public class GameDesignManager
                 {
                     additionalPanels = 6;
                 }
+                else
+                {
+                    additionalPanels = 0;
+                }
                 //===========================
 
                 //level duration and rewards=============
@@ -54,19 +58,19 @@ public class GameDesignManager
                     switch ((ThreePairCellsList)p)
                     {
                         case ThreePairCellsList._3_2:
-                            levelDuration = 12 + difficulty;
+                            levelDuration = 10 + difficulty;
                             rewardsSecs = 4;
                             panelDuration = 1.2f;
                             break;
 
                         case ThreePairCellsList._3_3:
-                            levelDuration = 18 + difficulty;
+                            levelDuration = 15 + difficulty;
                             rewardsSecs = 5;
                             panelDuration = 1.2f;
                             break;
 
                         case ThreePairCellsList._4_3:
-                            levelDuration = 23 + difficulty;
+                            levelDuration = 20 + difficulty;
                             rewardsSecs = 8;
                             panelDuration = 1.3f;
                             break;
@@ -78,31 +82,31 @@ public class GameDesignManager
                             break;
 
                         case ThreePairCellsList._6_3:
-                            levelDuration = 40 + difficulty*2;
+                            levelDuration = 40 + difficulty;
                             rewardsSecs = 17;
                             panelDuration = 1.3f;
                             break;
 
                         case ThreePairCellsList._7_3:
-                            levelDuration = 80 + difficulty * 4;
+                            levelDuration = 60 + difficulty * 4;
                             rewardsSecs = 30;
                             panelDuration = 1.4f;
                             break;
 
                         case ThreePairCellsList._6_5:
-                            levelDuration = 120 + difficulty * 8;
+                            levelDuration = 100 + difficulty * 4;
                             rewardsSecs = 50;
                             panelDuration = 1.4f;
                             break;
 
                         case ThreePairCellsList._6_6:
-                            levelDuration = 150 + difficulty * 11;
+                            levelDuration = 120 + difficulty * 8;
                             rewardsSecs = 70;
                             panelDuration = 1.4f;
                             break;
 
                         case ThreePairCellsList._8_6:
-                            levelDuration = 200 + difficulty * 15;
+                            levelDuration = 160 + difficulty * 15;
                             rewardsSecs = 80;
                             panelDuration = 1.5f;
                             break;

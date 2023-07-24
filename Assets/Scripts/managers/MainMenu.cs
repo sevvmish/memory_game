@@ -56,6 +56,9 @@ public class MainMenu : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        //Screen.SetResolution(1200, 600, false);
+        //Camera.main.aspect = 2;
+
         StartCoroutine(fadeScreenOff());
 
         if (Globals.IsSoundOn)
@@ -161,7 +164,7 @@ public class MainMenu : MonoBehaviour
         SaveLoadManager.Load();
 
         print("SDK enabled: " + YandexGame.SDKEnabled);
-        Globals.CurrentLanguage = YandexGame.savesData.language;
+        Globals.CurrentLanguage = YandexGame.EnvironmentData.language;
         print("language set to: " + Globals.CurrentLanguage);
 
         Globals.IsMobilePlatform = YandexGame.EnvironmentData.isMobile;
@@ -261,10 +264,10 @@ public class MainMenu : MonoBehaviour
         
         //print("type: " + Globals.GameType + ", level: " + Globals.GameLevel);
 
-        for (int i = 0; i < Globals.MainPlayerData.GT1Pn.Length; i++)
+        for (int i = 0; i < Globals.MainPlayerData.GT1Pn2.Length; i++)
         {
             
-            if (Globals.MainPlayerData.GT1Pn[i] == 1 || (i == 0 && Globals.MainPlayerData.GT1Pn[i] == 0))
+            if (Globals.MainPlayerData.GT1Pn2[i] == 1 || (i == 0 && Globals.MainPlayerData.GT1Pn2[i] == 0))
             {
                 GameObject c = Instantiate(cellWithNumber, placeForLevelCellsForType1);
                 c.SetActive(true);
@@ -282,10 +285,10 @@ public class MainMenu : MonoBehaviour
 
     private void panel2_Descriptor()
     {
-        for (int i = 0; i < Globals.MainPlayerData.GT2Pn.Length; i++)
+        for (int i = 0; i < Globals.MainPlayerData.GT2Pn2.Length; i++)
         {
 
-            if (Globals.MainPlayerData.GT2Pn[i] == 1 || (i == 0 && Globals.MainPlayerData.GT2Pn[i] == 0))
+            if (Globals.MainPlayerData.GT2Pn2[i] == 1 || (i == 0 && Globals.MainPlayerData.GT2Pn2[i] == 0))
             {
                 GameObject c = Instantiate(cellWithNumber, placeForLevelCellsForType2);
                 c.SetActive(true);
@@ -304,14 +307,14 @@ public class MainMenu : MonoBehaviour
     private void playType1Game()
     {
         Globals.GameType = 1;
-        Globals.GameLevel = Globals.MainPlayerData.GT1Pn.Sum();
+        Globals.GameLevel = Globals.MainPlayerData.GT1Pn2.Sum();
         Globals.GameDesignManager.SetLevelData(false);
     }
 
     private void playType2Game()
     {
         Globals.GameType = 2;
-        Globals.GameLevel = Globals.MainPlayerData.GT2Pn.Sum();
+        Globals.GameLevel = Globals.MainPlayerData.GT2Pn2.Sum();
         Globals.GameDesignManager.SetLevelData(false);
     }
 

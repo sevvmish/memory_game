@@ -36,7 +36,7 @@ public class Globals : MonoBehaviour
     public static int PreviousPackIDNumber;
 
     public static float PanelSimpleRotationSpeed = 0.3f;// = 0.35f;
-    public static PairGroupTypes CurrentPairGroupType = PairGroupTypes.three;
+    public static PairGroupTypes CurrentPairGroupType = PairGroupTypes.two;
 
 
     //level customization============================
