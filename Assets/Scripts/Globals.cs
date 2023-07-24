@@ -41,7 +41,7 @@ public class Globals : MonoBehaviour
 
     //level customization============================
     public static float StageDurationInSec = 100;
-    public static Vector2 PanelsNumber = new Vector2(6, 5);
+    public static Vector2 PanelsNumber = new Vector2(3, 2);
 
     //===============================================
 

@@ -118,11 +118,48 @@ public class GameManager : MonoBehaviour
 
         if (Globals.IsMobilePlatform)
         {
-            mainCamera.fieldOfView = 60;
+            if (Globals.PanelsNumber.x <= 3)
+            {
+                mainCamera.fieldOfView = 50;
+            }
+            else if (Globals.PanelsNumber.x <= 4)
+            {
+                mainCamera.fieldOfView = 54;
+            }
+            else if (Globals.PanelsNumber.x <= 5)
+            {
+                mainCamera.fieldOfView = 57;
+            }
+            else
+            {
+                mainCamera.fieldOfView = 60;
+            }
+            
         }
         else
         {
-            if (Globals.PanelsNumber.x < 8) mainCamera.fieldOfView = 70;
+            if (Globals.PanelsNumber.x <= 3)
+            {
+                mainCamera.fieldOfView = 50;
+            }
+            else if (Globals.PanelsNumber.x <= 4)
+            {
+                mainCamera.fieldOfView = 55;
+            }
+            else if (Globals.PanelsNumber.x <= 5)
+            {
+                mainCamera.fieldOfView = 57;
+            }
+            else if(Globals.PanelsNumber.x <= 7)
+            {
+                mainCamera.fieldOfView = 65;
+            }
+            else if (Globals.PanelsNumber.x <= 8)
+            {
+                mainCamera.fieldOfView = 65;
+            }
+
+            //if (Globals.PanelsNumber.x < 8) mainCamera.fieldOfView = 70;
         }
 
 
