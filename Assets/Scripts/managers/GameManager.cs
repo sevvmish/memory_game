@@ -7,7 +7,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using YG;
-using System.Runtime.InteropServices;
 
 [DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
@@ -368,7 +367,7 @@ public class GameManager : MonoBehaviour
                 isRewardedStarted = false;
                 isRewardedOK = false;
                 isRewardedUsed = true;
-                //givePrizeForReward();
+                givePrizeForReward();
             }
         }
 
@@ -652,7 +651,6 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
 
             _audio.Mute();
-            isTouchActive = false;
             print("starting interstitital");
 
             GameObject TransitionScreen = Instantiate(Resources.Load<GameObject>("TransitionCanvas"));
@@ -691,7 +689,6 @@ public class GameManager : MonoBehaviour
     private void advClosed()
     {
         print("adv was closed");
-        isTouchActive = true;
         nextLevelAction?.Invoke();
     }
 
@@ -707,22 +704,9 @@ public class GameManager : MonoBehaviour
     private void advRewardedClosed()
     {
         print("rewarded was OK-closed");
-        winLosePanel.SetActive(false);
-        StartCoroutine(waitAndDo());
-    }
-    private IEnumerator waitAndDo()
-    {
-        yield return new WaitForSeconds(0.3f);
-
-        if (isRewardedUsed)
-        {
-            givePrizeForReward();
-        }
-        else
-        {
-            print("rewarded was not watched");
-            winLosePanel.SetActive(true);
-        }
+        //
+        //PanelsLocation.gameObject.SetActive(true);
+        
     }
 
     private void givePrizeForReward()
@@ -751,14 +735,12 @@ public class GameManager : MonoBehaviour
     private void advError()
     {
         print("adv was ERROR");
-        isTouchActive = true;
         nextLevelAction?.Invoke();        
     }
 
     private void advRewardedError()
     {
         print("adv was ERROR");
-        isTouchActive = true;
         losePartPanelReward.SetActive(false);
         losePartPanelNoReward.SetActive(true);
     }
