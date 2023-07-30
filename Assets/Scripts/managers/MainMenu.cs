@@ -11,6 +11,7 @@ using YG;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private Button resetSave;
+    [SerializeField] private GameObject back;
 
     [SerializeField] private GameObject mainPlay;
     [SerializeField] private GameObject chooseType;
@@ -240,6 +241,8 @@ public class MainMenu : MonoBehaviour
                 panel2_Descriptor();
                 mainPlay.gameObject.SetActive(true);
                 loading.gameObject.SetActive(false);
+                
+                back.SetActive(Globals.IsMobilePlatform);
             }            
         }
         

@@ -169,6 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff7f94de037aac742ac3ed362779978c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  back: {fileID: 254743602}
   winLosePanel: {fileID: 350761913}
   winPartPanel: {fileID: 1990483529}
   losePartPanelNoReward: {fileID: 1735622545}
@@ -1169,7 +1170,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &254743603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2121,7 +2122,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_BackGroundColor: {r: 0.1764706, g: 0.27450982, b: 0.54901963, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

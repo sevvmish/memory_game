@@ -7,7 +7,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using YG;
-using System.Runtime.InteropServices;
 
 [DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
@@ -15,6 +14,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("win or lose panels")]
+    [SerializeField] private GameObject back;
     [SerializeField] private GameObject winLosePanel;
     [SerializeField] private GameObject winPartPanel; 
     [SerializeField] private GameObject losePartPanelNoReward;
@@ -116,6 +116,8 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+
+        back.SetActive(Globals.IsMobilePlatform);
 
         if (Globals.IsMobilePlatform)
         {
