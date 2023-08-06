@@ -9,6 +9,7 @@ public class Translation : ScriptableObject
     public string playText;
     public string loadingText;
     public string next;
+    public string DeleteProgress;
 
     [Header("Types")]
     public string Type1Name;

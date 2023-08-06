@@ -17,13 +17,13 @@ public class SaveLoadManager
         switch(Globals.GameType)
         {
             case 1:
-                Globals.MainPlayerData.GT1Pn2[Globals.GameLevel] = 1;
-                Globals.MainPlayerData.LGT = 1;
+                Globals.MainPlayerData.GT1Pn3[Globals.GameLevel] = 1;
+                Globals.MainPlayerData.LGT1 = 1;
                 break;
 
             case 2:
-                Globals.MainPlayerData.GT2Pn2[Globals.GameLevel] = 1;
-                Globals.MainPlayerData.LGT = 2;
+                Globals.MainPlayerData.GT2Pn3[Globals.GameLevel] = 1;
+                Globals.MainPlayerData.LGT1 = 2;
                 break;
         }
 
@@ -35,7 +35,7 @@ public class SaveLoadManager
         //Debug.Log("saved: " + data);
         PlayerPrefs.SetString(ID, data);
 
-        YandexGame.savesData.PlayerMainData2 = data;
+        YandexGame.savesData.PlayerMainData3 = data;
 
         try
         {
@@ -58,7 +58,7 @@ public class SaveLoadManager
         {
             //YandexGame.LoadCloud();
             //YandexGame.LoadProgress();
-            fromSave = YandexGame.savesData.PlayerMainData2;
+            fromSave = YandexGame.savesData.PlayerMainData3;
             //Debug.Log("что получено из сейва облака: " + fromSave);
         }
         catch (System.Exception ex)

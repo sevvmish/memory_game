@@ -5,12 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using YG;
 
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private Button resetSave;
+    [SerializeField] private Button resetOK;
+    [SerializeField] private Button resetNO;
+    [SerializeField] private TextMeshProUGUI deleteProgressText;
+    [SerializeField] private GameObject warningDelete;
     [SerializeField] private GameObject back;
 
     [SerializeField] private GameObject mainPlay;
@@ -72,8 +77,9 @@ public class MainMenu : MonoBehaviour
         }
 
         mainPlay.gameObject.SetActive(false);
+        resetSave.gameObject.SetActive(false);
         loading.gameObject.SetActive(true);
-
+        warningDelete.gameObject.SetActive(false);
         chooseType.SetActive(false);
         Type1_Descriptor.SetActive(false);
         Type2_Descriptor.SetActive(false);
@@ -84,6 +90,7 @@ public class MainMenu : MonoBehaviour
         mainPlayButton.onClick.AddListener(() =>
         {
             mainPlay.gameObject.SetActive(false);
+            resetSave.gameObject.SetActive(false);
             chooseType.SetActive(true);
             _audio.PlaySound_Success();
         });
@@ -141,14 +148,34 @@ public class MainMenu : MonoBehaviour
             playType2Game();
         });
 
-        /*
+        
         resetSave.onClick.AddListener(() =>
         {
             _audio.PlaySound_Click();
-            YandexGame.ResetSaveProgress();
-            Globals.MainPlayerData = new PlayerData();
-            YandexGame.SaveCloud();
-        });*/
+            warningDelete.SetActive(true);
+        });
+
+        resetOK.onClick.AddListener(() =>
+        {
+            _audio.PlaySound_Success();
+            StartCoroutine(playReset());
+        });
+
+        resetNO.onClick.AddListener(() =>
+        {
+            _audio.PlaySound_Click();
+            warningDelete.SetActive(false);
+        });
+    }
+
+    private IEnumerator playReset()
+    {
+        Globals.GameType = 0;
+        YandexGame.ResetSaveProgress();
+        Globals.MainPlayerData = new PlayerData();
+        SaveLoadManager.Save();
+        yield return new WaitForSeconds(0.2f);
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void TypeDescriptorsBack()
@@ -210,14 +237,7 @@ public class MainMenu : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            YandexGame.ResetSaveProgress();
-            Globals.MainPlayerData = new PlayerData();
-            SaveLoadManager.Save();
-            SaveLoadManager.Load();
-        }
-
+        
         if (!Globals.IsInitiated)
         {
             if (!isTryGetData)
@@ -241,8 +261,16 @@ public class MainMenu : MonoBehaviour
                 panel2_Descriptor();
                 mainPlay.gameObject.SetActive(true);
                 loading.gameObject.SetActive(false);
-                
-                back.SetActive(Globals.IsMobilePlatform);
+                resetSave.gameObject.SetActive(true);
+                //back.SetActive(Globals.IsMobilePlatform);
+                if (DateTime.Now.CompareTo(new DateTime(2023, 9, 1)) >= 1)
+                {
+                    back.SetActive(true);
+                }
+                else
+                {
+                    back.SetActive(false);
+                }
             }            
         }
         
@@ -260,6 +288,8 @@ public class MainMenu : MonoBehaviour
 
         type1Description.text = lang.Type1Description;
         type2Description.text = lang.Type2Description;
+
+        deleteProgressText.text = lang.DeleteProgress;
     }
 
     private void panel1_Descriptor()
@@ -267,10 +297,10 @@ public class MainMenu : MonoBehaviour
         
         //print("type: " + Globals.GameType + ", level: " + Globals.GameLevel);
 
-        for (int i = 0; i < Globals.MainPlayerData.GT1Pn2.Length; i++)
+        for (int i = 0; i < Globals.MainPlayerData.GT1Pn3.Length; i++)
         {
             
-            if (Globals.MainPlayerData.GT1Pn2[i] == 1 || (i == 0 && Globals.MainPlayerData.GT1Pn2[i] == 0))
+            if (Globals.MainPlayerData.GT1Pn3[i] == 1 || (i == 0 && Globals.MainPlayerData.GT1Pn3[i] == 0))
             {
                 GameObject c = Instantiate(cellWithNumber, placeForLevelCellsForType1);
                 c.SetActive(true);
@@ -288,10 +318,10 @@ public class MainMenu : MonoBehaviour
 
     private void panel2_Descriptor()
     {
-        for (int i = 0; i < Globals.MainPlayerData.GT2Pn2.Length; i++)
+        for (int i = 0; i < Globals.MainPlayerData.GT2Pn3.Length; i++)
         {
 
-            if (Globals.MainPlayerData.GT2Pn2[i] == 1 || (i == 0 && Globals.MainPlayerData.GT2Pn2[i] == 0))
+            if (Globals.MainPlayerData.GT2Pn3[i] == 1 || (i == 0 && Globals.MainPlayerData.GT2Pn3[i] == 0))
             {
                 GameObject c = Instantiate(cellWithNumber, placeForLevelCellsForType2);
                 c.SetActive(true);
@@ -310,14 +340,14 @@ public class MainMenu : MonoBehaviour
     private void playType1Game()
     {
         Globals.GameType = 1;
-        Globals.GameLevel = Globals.MainPlayerData.GT1Pn2.Sum();
+        Globals.GameLevel = Globals.MainPlayerData.GT1Pn3.Sum();
         Globals.GameDesignManager.SetLevelData(false);
     }
 
     private void playType2Game()
     {
         Globals.GameType = 2;
-        Globals.GameLevel = Globals.MainPlayerData.GT2Pn2.Sum();
+        Globals.GameLevel = Globals.MainPlayerData.GT2Pn3.Sum();
         Globals.GameDesignManager.SetLevelData(false);
     }
 

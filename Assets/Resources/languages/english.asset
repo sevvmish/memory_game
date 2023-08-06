@@ -15,6 +15,7 @@ MonoBehaviour:
   playText: PLAY
   loadingText: LOADING
   next: NEXT
+  DeleteProgress: You are going to reset all game progress. Continue?
   Type1Name: two at a time
   Type2Name: three at a time
   Type3Name: find pictures

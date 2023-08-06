@@ -117,7 +117,16 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-        back.SetActive(Globals.IsMobilePlatform);
+        //back.SetActive(Globals.IsMobilePlatform);
+        if (DateTime.Now.CompareTo(new DateTime(2023,9,1))>=1)
+        {
+            back.SetActive(true);
+        }
+        else
+        {
+            back.SetActive(false);
+        }
+        
 
         if (Globals.IsMobilePlatform)
         {
@@ -165,8 +174,7 @@ public class GameManager : MonoBehaviour
             //if (Globals.PanelsNumber.x < 8) mainCamera.fieldOfView = 70;
         }
 
-
-
+        
         lang = Localization.GetInstanse(Globals.CurrentLanguage).GetCurrentTranslation();
 
         hint1.SetActive(false);
@@ -667,6 +675,7 @@ public class GameManager : MonoBehaviour
             YandexGame.CloseFullAdEvent = advClosed;//nextLevelAction;
             YandexGame.ErrorFullAdEvent = advError;//nextLevelAction;
             YandexGame.FullscreenShow();
+
         }
         else
         {
@@ -677,7 +686,8 @@ public class GameManager : MonoBehaviour
 
     private void advStarted()
     {
-        print("adv was OK");        
+        print("adv was OK");
+        Time.timeScale = 0;
     }
 
     private void rewardStarted()
@@ -688,11 +698,14 @@ public class GameManager : MonoBehaviour
 
         print("reward was OK");
         isRewardedStarted = true;
+
+        Time.timeScale = 0;
     }
 
     private void advClosed()
     {
         print("adv was closed");
+        Time.timeScale = 1;
         isTouchActive = true;
         nextLevelAction?.Invoke();
     }
@@ -709,6 +722,7 @@ public class GameManager : MonoBehaviour
     private void advRewardedClosed()
     {
         print("rewarded was OK-closed");
+        Time.timeScale = 1;
         winLosePanel.SetActive(false);
         StartCoroutine(waitAndDo());
     }
@@ -753,6 +767,7 @@ public class GameManager : MonoBehaviour
     private void advError()
     {
         print("adv was ERROR");
+        Time.timeScale = 1;
         isTouchActive = true;
         nextLevelAction?.Invoke();        
     }
@@ -760,6 +775,7 @@ public class GameManager : MonoBehaviour
     private void advRewardedError()
     {
         print("adv was ERROR");
+        Time.timeScale = 1;
         isTouchActive = true;
         losePartPanelReward.SetActive(false);
         losePartPanelNoReward.SetActive(true);
@@ -942,7 +958,20 @@ public class GameManager : MonoBehaviour
         _audio.PlaySound_Success();
         hint1.transform.DOScale(Vector3.one, 0.3f);
 
-        yield return new WaitForSeconds(5);
+
+
+
+        for (float i = 0; i < 5; i += 0.1f)
+        {
+            if (winLosePanel.activeSelf)
+            {
+                hint1.SetActive(false);
+                hint2.SetActive(false);
+                yield break;
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+
         hint1.transform.DOScale(Vector3.zero, 0.3f);
 
         yield return new WaitForSeconds(1);
@@ -953,7 +982,17 @@ public class GameManager : MonoBehaviour
         hint2.transform.DOScale(Vector3.one, 0.3f);
         _audio.PlaySound_Success();
 
-        yield return new WaitForSeconds(5);
+        for (float i = 0; i < 5; i += 0.1f)
+        {
+            if (winLosePanel.activeSelf)
+            {
+                hint1.SetActive(false);
+                hint2.SetActive(false);
+                yield break;
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+
         hint2.transform.DOScale(Vector3.zero, 0.3f);
         yield return new WaitForSeconds(1);
         hint2.SetActive(false);
