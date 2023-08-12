@@ -366,6 +366,8 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(showHints());
         }
+
+        print(Globals.GameLevel + " - current level");
     }
 
 

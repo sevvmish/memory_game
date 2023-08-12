@@ -352,8 +352,11 @@ public class MainMenu : MonoBehaviour
     }
 
     public static void RepeteGame(int _type, int number)
-    {        
-        Globals.GameDesignManager.SetLevelData(_type, number);
+    {
+        //Globals.GameDesignManager.SetLevelData(_type, number);
+        Globals.GameType = _type;
+        Globals.GameLevel = number+1;
+        Globals.GameDesignManager.SetLevelData(false);
     }
 
     private IEnumerator fadeScreenOff()

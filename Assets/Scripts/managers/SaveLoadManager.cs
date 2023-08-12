@@ -17,12 +17,12 @@ public class SaveLoadManager
         switch(Globals.GameType)
         {
             case 1:
-                Globals.MainPlayerData.GT1Pn3[Globals.GameLevel] = 1;
+                if (Globals.GameLevel < Globals.MainPlayerData.GT1Pn3.Length) Globals.MainPlayerData.GT1Pn3[Globals.GameLevel] = 1;
                 Globals.MainPlayerData.LGT1 = 1;
                 break;
 
             case 2:
-                Globals.MainPlayerData.GT2Pn3[Globals.GameLevel] = 1;
+                if (Globals.GameLevel < Globals.MainPlayerData.GT2Pn3.Length) Globals.MainPlayerData.GT2Pn3[Globals.GameLevel] = 1;
                 Globals.MainPlayerData.LGT1 = 2;
                 break;
         }
